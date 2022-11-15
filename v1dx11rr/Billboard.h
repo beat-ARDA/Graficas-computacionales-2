@@ -6,6 +6,10 @@
 #include <DxErr.h>
 #include <D3Dcompiler.h>
 #include <d3dx10math.h>
+#include <conio.h>
+#include <vector>
+#include <iostream>
+#include <xnamath.h>
 
 struct vector2 {
 	float u, v;
@@ -24,8 +28,6 @@ public:
 		D3DXVECTOR3 pos;
 	};
 
-	
-
 	ID3D11VertexShader* VertexShaderVS;
 	ID3D11PixelShader* solidColorPS;
 
@@ -42,6 +44,9 @@ public:
 	ID3D11Buffer* worldCB;
 	D3DXMATRIX viewMatrix;
 	D3DXMATRIX projMatrix;
+
+	ID3D11Buffer* m_pLightPosCB;
+	XMFLOAT4 m_LightPos;
 
 	float posx, posz;
 	float escalx, escaly;
@@ -62,11 +67,14 @@ public:
 		d3dContext = D3DContext;
 		d3dDevice = D3DDevice;
 		//este es el ancho y el alto del terreno en su escala
-		
+
 		float escal = escala;
 		frontal = D3DXVECTOR3(0, 0, 1);
+
+		m_pLightPosCB = NULL;
+		m_LightPos = XMFLOAT4(10.0f, 100.0f, -100.0f, 1.0f);
 		//aqui cargamos las texturas de alturas y el cesped
-		CargaParametros(billb,normal, escal);
+		CargaParametros(billb, normal, escal);
 	}
 
 	~BillboardRR()
@@ -273,6 +281,12 @@ public:
 			return false;
 		}
 
+		constDesc.ByteWidth = sizeof(XMFLOAT4);
+		d3dResult = d3dDevice->CreateBuffer(&constDesc, 0, &m_pLightPosCB);
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
 
 		return true;
 	}
@@ -302,7 +316,8 @@ public:
 			projCB->Release();
 		if (worldCB)
 			worldCB->Release();
-
+		if (m_pLightPosCB)
+			m_pLightPosCB->Release();
 
 		colorMapSampler = 0;
 		colorMap = 0;
@@ -318,7 +333,7 @@ public:
 	}
 
 
-	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, D3DXVECTOR3 poscam, float xx, float zz, float posy, float escala, vector2* uv1, vector2* uv2, vector2* uv3, vector2* uv4, int frame)
+	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, D3DXVECTOR3 poscam, float xx, float zz, float posy, float escala, vector2* uv1, vector2* uv2, vector2* uv3, vector2* uv4, int frame, bool animated)
 	{
 		posx = xx;
 		posz = zz;
@@ -348,7 +363,19 @@ public:
 		vertices[3].pos.z = 1 * escala;
 		vertices[3].UV.x = uv4[frame].u;
 		vertices[3].UV.y = uv4[frame].v;
+		if (!animated) {
+			vertices[0].UV.x = 0.0f;
+			vertices[0].UV.y = 1.0f;
 
+			vertices[1].UV.x = 0.0f;
+			vertices[1].UV.y = 0.0f;
+
+			vertices[2].UV.x = 1.0f;
+			vertices[2].UV.y = 0.0f;
+
+			vertices[3].UV.x = 1.0f;
+			vertices[3].UV.y = 1.0f;
+		}
 		//proceso de guardar el buffer de vertices para su uso en el render
 		D3D11_BUFFER_DESC vertexDesc;
 		ZeroMemory(&vertexDesc, sizeof(vertexDesc));
@@ -392,7 +419,7 @@ public:
 		//mueve la camara
 		float difz = poscam.z - posz;
 		float difx = poscam.x - posx;
-		float dist = sqrt(difz*difz + difx * difx);
+		float dist = sqrt(difz * difz + difx * difx);
 		float angle = acos(difx / dist);// * (180.0 / D3DX_PI);
 
 		D3DXMATRIX rotationMat;
@@ -410,10 +437,13 @@ public:
 		d3dContext->UpdateSubresource(worldCB, 0, 0, &worldMat, 0, 0);
 		d3dContext->UpdateSubresource(viewCB, 0, 0, &vista, 0, 0);
 		d3dContext->UpdateSubresource(projCB, 0, 0, &proyeccion, 0, 0);
+		d3dContext->UpdateSubresource(m_pLightPosCB, 0, 0, &m_LightPos, 0, 0);
+
 		//le pasa al shader los buffers
 		d3dContext->VSSetConstantBuffers(0, 1, &worldCB);
 		d3dContext->VSSetConstantBuffers(1, 1, &viewCB);
 		d3dContext->VSSetConstantBuffers(2, 1, &projCB);
+		d3dContext->VSSetConstantBuffers(3, 1, &m_pLightPosCB);
 		//cantidad de trabajos
 
 		d3dContext->DrawIndexed(6, 0, 0);

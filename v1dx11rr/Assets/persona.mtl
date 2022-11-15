@@ -1,0 +1,60 @@
+newmtl PantalonFBXASC046001SG6
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Cuir_BaseColor.png
+Ni 1.00
+Ks 0.02 0.00 0.00
+Ns 23.00
+newmtl PantalonFBXASC046001SG7
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+Ni 1.00
+Ks 0.50 0.50 0.50
+Ns 54.89
+newmtl PantalonFBXASC046001SG8
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd yeux_BaseColor.png
+Ni 1.00
+Ks 0.20 0.20 0.20
+Ns 23.00
+newmtl PantalonFBXASC046001SG9
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Haut_BaseColor.png
+Ni 1.00
+Ks 0.00 0.00 0.00
+Ns 23.00
+newmtl PantalonFBXASC046001SG10
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Vestes_BaseColor.png
+Ni 1.00
+Ks 0.03 0.00 0.00
+Ns 23.00
+newmtl PantalonFBXASC046001SG11
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Tête_BaseColor.png
+Ni 1.00
+Ks 0.06 0.05 0.03
+Ns 23.00
+newmtl initialShadingGroup
+illum 4
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd Blank_image.jpg
+Ni 1.00

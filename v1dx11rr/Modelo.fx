@@ -1,113 +1,146 @@
 Texture2D colorMap : register(t0);
 Texture2D specMap : register(t1);
+Texture2D normalMap : register(t2);
 
 SamplerState colorSampler : register(s0);
 
 cbuffer cbChangerEveryFrame : register(b0)
 {
-	matrix worldMatrix;
+    matrix worldMatrix;
 };
 
 cbuffer cbNeverChanges : register(b1)
 {
-	matrix viewMatrix;
+    matrix viewMatrix;
 };
 
 cbuffer cbChangeOnResize : register(b2)
 {
-	matrix projMatrix;
+    matrix projMatrix;
 };
 
 cbuffer cbChangesOccasionally : register(b3)
 {
-	float3 cameraPos;
+    float3 cameraPos;
 };
 
 cbuffer cbChangesOccasionally : register(b4)
 {
-	float specForce;
+    float specForce;
+};
+
+cbuffer cbColorDifuso : register(b5)
+{
+    float4 colorDifusoEntrante;
+};
+
+cbuffer cbLightPos : register(b6)
+{
+    float4 lightPos;
+};
+
+cbuffer cbMagnitudEspecular : register(b0)
+{
+    float4 magnitudEspecular;
 };
 
 struct VS_Input
 {
-	float4 pos : POSITION;
-	float2 tex0 : TEXCOORD0;	
-	float3 normal : NORMAL0;
+    float4 pos : POSITION;
+    float2 tex0 : TEXCOORD0;
+    float3 norm : NORMAL;
 };
 
 struct PS_Input
 {
-	float4 pos : SV_POSITION;
-	float2 tex0 : TEXCOORD0;	
-	float3 normal : TEXCOORD1;
-	float3 campos : TEXCOORD2;
-	float specForce : TEXCOORD3;
+    float4 pos : SV_POSITION;
+    float2 tex0 : TEXCOORD0;
+    float3 norm : TEXCOORD1;
+    float3 lightVec : TEXCOORD2;
+    float3 cameraVec : TEXCOORD3;
+    float3 tangent : TEXCOORD4;
+    float3 binormal : TEXCOORD5;
 };
 
 PS_Input VS_Main(VS_Input vertex)
 {
-	
-	float4 worldPosition;
+    PS_Input vsOut = (PS_Input) 0;
 
-		PS_Input vsOut = (PS_Input)0;
+    // Initial transformations
+    float4 worldPos = mul(vertex.pos, worldMatrix);
+    vsOut.pos = mul(worldPos, viewMatrix);
+    vsOut.pos = mul(vsOut.pos, projMatrix);
+    vsOut.tex0 = vertex.tex0;
+    
+    //Colocar normal en matriz de mundo para que se mueva
+    vsOut.norm = mul(vertex.norm, (float3x3) worldMatrix);
+    vsOut.norm = normalize(vsOut.norm);
+    
+    //tangente
+    float tangente;
+    float c1 = cross(vsOut.norm, float3(0.0f, 0.0f, 1.0f));
+    float c2 = cross(vsOut.norm, float3(0.0f, 1.0f, 0.0f));
+    
+    if (length(c1) > length(c2))
+    {
+        tangente = c1;
+    }
+    else
+    {
+        tangente = c2;
+    }
+    
+    vsOut.tangent = normalize(tangente);
+    
+    //Binormal
+    float3 binormal;
+    
+    binormal = cross(vsOut.norm, vsOut.tangent);
+    vsOut.binormal = normalize(binormal);
+    
 
-		vsOut.pos = mul(vertex.pos, worldMatrix);
-		vsOut.pos = mul(vsOut.pos, viewMatrix);
-		vsOut.pos = mul(vsOut.pos, projMatrix);
+    // Calcular el vector de la luz
+    //vsOut.lightVec = normalize((float3) lightPos - (float3) worldPos);
+    float3 lightDirection = float3(-0.2f, -1.0f, -0.3f);
+    vsOut.lightVec = normalize(-lightDirection);
+    // Calculate camera vector
+    vsOut.cameraVec = normalize(cameraPos - (float3) worldPos);
 
-		vsOut.tex0 = vertex.tex0;
-		vsOut.normal = normalize(mul(vertex.normal, worldMatrix));
-
-		worldPosition = mul(vertex.pos, worldMatrix);
-
-		vsOut.campos = cameraPos.xyz - worldPosition.xyz;
-
-		vsOut.campos = normalize(vsOut.campos);
-
-		vsOut.specForce = specForce;
-
-	return vsOut;
+    return vsOut;
 }
 
-float4 PS_Main(PS_Input pix) : SV_TARGET
+float4 PS_Main(PS_Input frag) : SV_TARGET
 {
-	float4 textureColor;
-	float3 lightDir;
-	float lightIntensity;
-	float4 color;
-	float3 reflection;
-	float4 specular;
-	float4 specularMap;
-	float4 finalSpec;
+        // Get parameters
+    float3 normal = normalize(frag.norm);
+    float3 lightVec = normalize(frag.lightVec);
+    float3 cameraVec = normalize(frag.cameraVec);
+    float4 textura = colorMap.Sample(colorSampler, frag.tex0);
+    float4 textnorm = normalMap.Sample(colorSampler, frag.tex0);
+    // Ambiental
+    float3 ambiental = float3(0.2f, 0.2f, 0.2f);
+    //float3 lightAmbiental = ambiental * textura.xyz;
+    float3 lightAmbiental = ambiental;
 
-	textureColor = colorMap.Sample(colorSampler, pix.tex0);
-	color = float4(0.2, 0.2, 0.2, 1);// ambient color
+    textnorm = normalize(2.0 * textnorm - 1.0);
+    float3 bumpNormal = (textnorm.r * frag.tangent) + (textnorm.g * frag.binormal) + (textnorm.b * frag.norm);
+    bumpNormal = normalize(bumpNormal);
+    //Difusa
+    
+    float3 colorDifuso = float3(1.0f, 1.0f, 1.0f);
+    float intensidadDifusa = saturate(dot(bumpNormal, lightVec));
+    //float3 lightDifusa = colorDifuso * intensidadDifusa * textura.xyz;
+    float3 lightDifusa = colorDifuso * intensidadDifusa;
+    
+    //Especular
+    float3 colorEspecular = float3(0.8f, 0.8f, 0.8f);
+    float3 reflecDir = reflect(-lightVec, bumpNormal);
+    float spec = pow(saturate(dot(cameraVec, reflecDir)), 32.0f);
+    //float3 lightEspecular = colorEspecular * (spec * textura.xyz);
+    float3 lightEspecular = colorEspecular * spec;
 
-	specular = float4(0.0, 0.0, 0.0, 1.0); //specular color
-	specularMap = specMap.Sample(colorSampler, pix.tex0);
+    //Final
+    float3 iluminacionFinal = lightAmbiental + lightDifusa + lightEspecular;
 
-	lightDir = -(float3(0.5f, -1.0f, 0.0f)); // lightDirection
-
-	lightIntensity = saturate(dot(pix.normal, lightDir));
-
-	if (lightIntensity > 0) {
-		// Determine the final diffuse color based on the diffuse color and the amount of light intensity.
-		color += (float4(1.0f, 1.f, 1.f, 1.0f)/*diffuse color*/ * lightIntensity);
-
-		// Saturate the ambient and diffuse color.
-		color = saturate(color);
-
-		// Calculate the reflection vector based on the light intensity, normal vector, and light direction.
-		reflection = normalize(2 * lightIntensity * pix.normal - lightDir);
-
-		// Determine the amount of specular light based on the reflection vector, viewing direction, and specular power.
-		specular = pow(saturate(dot(reflection, pix.campos)), pix.specForce);
-		finalSpec = specular * specularMap;
-	}
-
-	color = color * textureColor;
-
-	color = saturate(color + finalSpec);
-
-	return color;
+    return float4(textura.r, textura.g, textura.b, 1.0f) * float4(iluminacionFinal, 1.0f);
 }

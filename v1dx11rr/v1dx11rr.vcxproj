@@ -161,6 +161,7 @@
     <ClInclude Include="Camara.h" />
     <ClInclude Include="DXRR.h" />
     <ClInclude Include="GamePadRR.h" />
+    <ClInclude Include="GUI.h" />
     <ClInclude Include="loadModel.h" />
     <ClInclude Include="ModeloRR.h" />
     <ClInclude Include="SkyDome.h" />
@@ -175,6 +176,10 @@
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Billboard.hlsl" />
+    <FxCompile Include="GUI.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4.0</ShaderModel>
+    </FxCompile>
     <FxCompile Include="Modelo.fx" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

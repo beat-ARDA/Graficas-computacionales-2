@@ -10,13 +10,14 @@
 #include "Billboard.h"
 #include "ModeloRR.h"
 #include "XACT3Util.h"
+#include "GUI.h"
 
-class DXRR{	
+class DXRR {
 
 private:
 	int ancho;
 	int alto;
-public:	
+public:
 	HINSTANCE hInstance;
 	HWND hWnd;
 
@@ -34,30 +35,61 @@ public:
 	ID3D11DepthStencilState* depthStencilState;
 	ID3D11DepthStencilState* depthStencilDisabledState;
 
-	ID3D11BlendState *alphaBlendState, *commonBlendState;
+	ID3D11BlendState* alphaBlendState, * commonBlendState;
+
+	GUI* fullVida;
+	GUI* middleVida;
+	GUI* endVida;
+	GUI* gameOver;
 
 	int frameBillboard;
 
-	TerrenoRR *terreno;
-	SkyDome *skydome;
-	BillboardRR *billboard;
-	Camara *camara;
-	ModeloRR* model;
-	
+	TerrenoRR* terreno;
+	SkyDome* skydome;
+	BillboardRR* billboard;
+	BillboardRR* billArbol;
+	BillboardRR* billArbusto;
+	Camara* camara;
+	ModeloRR* cantina;
+	ModeloRR* bala;
+	ModeloRR* caballoNegro;
+	ModeloRR* caballoBlanco;
+	ModeloRR* vagon;
+	ModeloRR* molino;
+	ModeloRR* barrel;
+	ModeloRR* carreta;
+	ModeloRR* tronco;
+	ModeloRR* vaquero;
+	ModeloRR* pistola;
+	ModeloRR* carril;
+	ModeloRR* tronco1;
+	ModeloRR* tronco2;
+
+	float rotCam;
+	float balaRespuesta;
 	float izqder;
 	float arriaba;
 	float vel;
 	bool breakpoint;
+	bool retraso;
 	vector2 uv1[32];
 	vector2 uv2[32];
 	vector2 uv3[32];
 	vector2 uv4[32];
+	bool setCamaraTipo;
+	bool playRevolver;
+
+	int vidas;
 
 	XACTINDEX cueIndex;
 	CXACT3Util m_XACT3;
-	
-    DXRR(HWND hWnd, int Ancho, int Alto)
+
+	DXRR(HWND hWnd, int Ancho, int Alto)
 	{
+		retraso = false;
+		vidas = 4;
+		balaRespuesta = 0.0f;
+		rotCam = 0;
 		breakpoint = false;
 		frameBillboard = 0;
 		ancho = Ancho;
@@ -72,11 +104,40 @@ public:
 		izqder = 0;
 		arriaba = 0;
 		billCargaFuego();
-		camara = new Camara(D3DXVECTOR3(0,80,6), D3DXVECTOR3(0,80,0), D3DXVECTOR3(0,1,0), Ancho, Alto);
-		terreno = new TerrenoRR(500, 500, d3dDevice, d3dContext);
-		skydome = new SkyDome(32, 32, 600.0f, &d3dDevice, &d3dContext, L"Assets/SkyDome/skydome.png");
-		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png",L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
-		model = new ModeloRR(d3dDevice, d3dContext, "Assets/Cofre/Cofre.obj", L"Assets/Cofre/Cofre-color.png", L"Assets/Cofre/Cofre-spec.png", 0, 0);
+		camara = new Camara(D3DXVECTOR3(0, 80, 6), D3DXVECTOR3(0, 80, 0), D3DXVECTOR3(0, 1, 0), Ancho, Alto);
+		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext);
+		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome34.png");
+		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+																													   /*BILLBOARDS*/
+		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png", L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
+		billArbol = new BillboardRR(L"Assets/Billboards/arbol.png", L"Assets/Billboards/arbol_normal.png", d3dDevice, d3dContext, 6);
+		billArbusto = new BillboardRR(L"Assets/Billboards/arbusto.png", L"Assets/Billboards/arbusto_normal.png", d3dDevice, d3dContext, 6);
+		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+																													   /*MODELOS*/
+		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
+		cantina = new ModeloRR(d3dDevice, d3dContext, "Assets/saloon/Saloon (1).obj", L"Assets/saloon/saloonUVSCOLORFINAL.jpg", L"Assets/saloon/saloonUVSCOLORFINAL.jpg", L"Assets/saloon/saloonUVSNORMALFINAL.png", 59, -90);
+		bala = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->posCam3P.x, camara->posCam3P.z);
+		molino = new ModeloRR(d3dDevice, d3dContext, "Assets/molino/molino_sis.obj", L"Assets/molino/molinocolor.jpg", L"Assets/molino/molinocolor.jpg", L"Assets/molino/molinonormal.png", 77, 106);
+		tronco = new ModeloRR(d3dDevice, d3dContext, "Assets/tronco/troncoprueba.obj", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotexnormal.png", -55, 40);
+		tronco1 = new ModeloRR(d3dDevice, d3dContext, "Assets/tronco/troncoprueba.obj", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotexnormal.png", -55, 46);
+		tronco2 = new ModeloRR(d3dDevice, d3dContext, "Assets/tronco/troncoprueba.obj", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotexnormal.png", -55, 43);
+		vagon = new ModeloRR(d3dDevice, d3dContext, "Assets/vagon/vagon.obj", L"Assets/vagon/miltrenCOLOR.jpg", L"Assets/vagon/miltrenCOLOR.jpg", L"Assets/vagon/miltrenCOLORnormal.png", -55, -41);
+		caballoNegro = new ModeloRR(d3dDevice, d3dContext, "Assets/horse/horse-obj.obj", L"Assets/horse/horseuvscolor.jpg", L"Assets/horse/horseuvscolor.jpg", L"Assets/horse/horseuvscolornormal.png", -100, -99);
+		caballoBlanco = new ModeloRR(d3dDevice, d3dContext, "Assets/horse/horseblanco.obj", L"Assets/horse/horseuvsblanco.jpg", L"Assets/horse/horseuvsblanco.jpg", L"Assets/horse/horseuvsblanconormal.png", camara->hdveo.x, camara->hdveo.z);
+		carreta = new ModeloRR(d3dDevice, d3dContext, "Assets/carreta/carreta_obj.obj", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLORnormal.png", 80, 15);
+		carril = new ModeloRR(d3dDevice, d3dContext, "Assets/carril/carril.obj", L"Assets/carril/METAL.jpg", L"Assets/carril/METAL.jpg", L"Assets/carril/METALnormal.png", -60, -29);
+		barrel = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolornormal.png", 34, 30);
+		vaquero = new ModeloRR(d3dDevice, d3dContext, "Assets/cowboyprota/cowboyprot.obj", L"Assets/cowboyprota/coreegidod.jpg", L"Assets/cowboyprota/coreegidod.jpg", L"Assets/cowboyprota/coreegidodnormal.png", 10, 10);
+		pistola = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/Colt_Python.obj", L"Assets/guns/gunsuvscolorfinalFINAL.jpg", L"Assets/guns/gunsuvscolorfinalFINAL.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 0.0f, 0.0f);
+
+		fullVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_full.png");
+		middleVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_2.png");
+		endVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_1.png");
+		gameOver = new GUI(d3dDevice, d3dContext, 1, 1, L"Assets/gameover/game_over.png");
+
+		setCamaraTipo = false;
+		playRevolver = false;
 	}
 
 	~DXRR()
@@ -84,7 +145,7 @@ public:
 		LiberaD3D();
 		m_XACT3.Terminate();
 	}
-	
+
 	bool IniciaD3D(HWND hWnd)
 	{
 		this->hInstance = hInstance;
@@ -99,14 +160,14 @@ public:
 		//Las formas en como la pc puede ejecutar el DX11, la mas rapida es D3D_DRIVER_TYPE_HARDWARE pero solo se puede usar cuando lo soporte el hardware
 		//otra opcion es D3D_DRIVER_TYPE_WARP que emula el DX11 en los equipos que no lo soportan
 		//la opcion menos recomendada es D3D_DRIVER_TYPE_SOFTWARE, es la mas lenta y solo es util cuando se libera una version de DX que no sea soportada por hardware
-		D3D_DRIVER_TYPE driverTypes[]=
+		D3D_DRIVER_TYPE driverTypes[] =
 		{
 			D3D_DRIVER_TYPE_HARDWARE, D3D_DRIVER_TYPE_WARP, D3D_DRIVER_TYPE_SOFTWARE
 		};
 		unsigned int totalDriverTypes = ARRAYSIZE(driverTypes);
 
 		//La version de DX que utilizara, en este caso el DX11
-		D3D_FEATURE_LEVEL featureLevels[]=
+		D3D_FEATURE_LEVEL featureLevels[] =
 		{
 			D3D_FEATURE_LEVEL_11_0, D3D_FEATURE_LEVEL_10_1, D3D_FEATURE_LEVEL_10_0
 		};
@@ -128,40 +189,40 @@ public:
 
 		HRESULT result;
 		unsigned int driver = 0, creationFlags = 0;
-		for(driver = 0; driver<totalDriverTypes; driver++)
+		for (driver = 0; driver < totalDriverTypes; driver++)
 		{
 			result = D3D11CreateDeviceAndSwapChain(0, driverTypes[driver], 0,
-				creationFlags, featureLevels, totalFeaturesLevels, 
+				creationFlags, featureLevels, totalFeaturesLevels,
 				D3D11_SDK_VERSION, &swapChainDesc, &swapChain,
 				&d3dDevice, &featureLevel, &d3dContext);
 
-			if(SUCCEEDED(result))
+			if (SUCCEEDED(result))
 			{
 				driverType = driverTypes[driver];
 				break;
 			}
 		}
 
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 
 			//Error al crear el Direct3D device
 			return false;
 		}
-		
+
 		ID3D11Texture2D* backBufferTexture;
 		result = swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (LPVOID*)&backBufferTexture);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			//"Error al crear el swapChainBuffer
 			return false;
 		}
 
 		result = d3dDevice->CreateRenderTargetView(backBufferTexture, 0, &backBufferTarget);
-		if(backBufferTexture)
+		if (backBufferTexture)
 			backBufferTexture->Release();
 
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			//Error al crear el renderTargetView
 			return false;
@@ -191,9 +252,9 @@ public:
 		depthTexDesc.BindFlags = D3D11_BIND_DEPTH_STENCIL;
 		depthTexDesc.CPUAccessFlags = 0;
 		depthTexDesc.MiscFlags = 0;
-		
+
 		result = d3dDevice->CreateTexture2D(&depthTexDesc, NULL, &depthTexture);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			MessageBox(0, L"Error", L"Error al crear la DepthTexture", MB_OK);
 			return false;
@@ -206,7 +267,7 @@ public:
 		descDSV.Texture2D.MipSlice = 0;
 
 		result = d3dDevice->CreateDepthStencilView(depthTexture, &descDSV, &depthStencilView);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			MessageBox(0, L"Error", L"Error al crear el depth stencil target view", MB_OK);
 			return false;
@@ -214,23 +275,35 @@ public:
 
 		d3dContext->OMSetRenderTargets(1, &backBufferTarget, depthStencilView);
 
-		return true;			
-		
+		//XACT
+		bool res = m_XACT3.Initialize();
+		if (!res) return false;
+
+		res = m_XACT3.LoadWaveBank(L"Assets\\audio\\WaveBank.xwb");
+		if (!res) return false;
+
+		res = m_XACT3.LoadSoundBank(L"Assets\\audio\\SoundBank.xsb");
+		if (!res) return false;
+		//Reproducir
+		cueIndex = m_XACT3.m_pSoundBank->GetCueIndex("revolver");
+
+		return true;
+
 	}
 
 	void LiberaD3D(void)
 	{
-		if(depthTexture)
+		if (depthTexture)
 			depthTexture->Release();
-		if(depthStencilView)
+		if (depthStencilView)
 			depthStencilView->Release();
-		if(backBufferTarget)
+		if (backBufferTarget)
 			backBufferTarget->Release();
-		if(swapChain)
+		if (swapChain)
 			swapChain->Release();
-		if(d3dContext)
+		if (d3dContext)
 			d3dContext->Release();
-		if(d3dDevice)
+		if (d3dDevice)
 			d3dDevice->Release();
 
 		depthTexture = 0;
@@ -240,39 +313,259 @@ public:
 		swapChain = 0;
 		backBufferTarget = 0;
 	}
-	
+
 	void Render(void)
 	{
+		retraso = true;
+		rotCam += izqder;
 		float sphere[3] = { 0,0,0 };
 		float prevPos[3] = { camara->posCam.x, camara->posCam.z, camara->posCam.z };
 		static float angle = 0.0f;
 		angle += 0.005;
 		if (angle >= 360) angle = 0.0f;
 		bool collide = false;
-		if( d3dContext == 0 )
+		if (d3dContext == 0)
 			return;
 
 		float clearColor[4] = { 0, 0, 0, 1.0f };
-		d3dContext->ClearRenderTargetView( backBufferTarget, clearColor );
-		d3dContext->ClearDepthStencilView( depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0 );
-		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 5 ;
-		camara->UpdateCam(vel, arriaba, izqder);
+		d3dContext->ClearRenderTargetView(backBufferTarget, clearColor);
+		d3dContext->ClearDepthStencilView(depthStencilView, D3D11_CLEAR_DEPTH, 1.0f, 0);
+		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 10;
+		camara->posCam3P.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 15;
+		camara->UpdateCam(vel, arriaba, izqder, this->setCamaraTipo);
 		skydome->Update(camara->vista, camara->proyeccion);
 
 		float camPosXZ[2] = { camara->posCam.x, camara->posCam.z };
 
 		TurnOffDepth();
-		skydome->Render(camara->posCam);
+		if (this->setCamaraTipo)
+			skydome->Render(camara->posCam);
+		else
+			skydome->Render(camara->posCam3P);
 		TurnOnDepth();
 		terreno->Draw(camara->vista, camara->proyeccion);
-		//TurnOnAlphaBlending();
-		billboard->Draw(camara->vista, camara->proyeccion, camara->posCam,
-			-11, -78, 4, 5, uv1, uv2, uv3, uv4, frameBillboard);
+		if (playRevolver)
+		{
 
-		//TurnOffAlphaBlending();
-		model->Draw(camara->vista, camara->proyeccion, terreno->Superficie(100, 20), camara->posCam, 10.0f, 0, 'A', 1);
+			m_XACT3.m_pSoundBank->Play(cueIndex, 0, 0, 0);
+			playRevolver = false;
+		}
+		if (setCamaraTipo) {
+			/*---------------------------------------------------------------------------*/
+			/*                                                 Billboards                                                  */
+			/*---------------------------------------------------------------------------*/
+				/*ARBOLES*/
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				20, -83, terreno->Superficie(20, -83) - 1, 18, uv1, uv2, uv3, uv4, frameBillboard, false);
 
-		swapChain->Present( 1, 0 );
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				100, -85, terreno->Superficie(100, -85) - 1, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-100, -60, terreno->Superficie(-100, -60) - 1, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-30, 40, terreno->Superficie(-30, 40) - 1, 18, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				50, 90, terreno->Superficie(50, 90) - 1, 18, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				90, 0, terreno->Superficie(90, 0) - 1, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+
+			/*ARBUSTOS*/
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				20, 0, terreno->Superficie(20, 0) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				80, 30, terreno->Superficie(80, 30) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				100, -40, terreno->Superficie(100, -40) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-40, -60, terreno->Superficie(-40, -60) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-40, 100, terreno->Superficie(-40, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-80, 80, terreno->Superficie(-80, 80) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-80, 100, terreno->Superficie(-80, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				80, 100, terreno->Superficie(-80, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+			/*---------------------------------------------------------------------------*/
+			/*                                                 COLISIONES                                              */
+			/*---------------------------------------------------------------------------*/
+			//Cantina
+			if (isPointInsideSphere(camara->getPoint(), cantina->getSphere(25.0f))) {
+				camara->posCam = camara->pastPosCam;
+			}
+
+			//Molino
+			if (isPointInsideSphere(camara->getPoint(), molino->getSphere(10.0f))) {
+				camara->posCam = camara->pastPosCam;
+			}
+
+			//Carreta
+			if (isPointInsideSphere(camara->getPoint(), tronco1->getSphere(12.0f))) {
+				camara->posCam = camara->pastPosCam;
+			}
+
+			//Caballo negro
+			if (isPointInsideSphere(camara->getPoint(), caballoNegro->getSphere(5.0f))) {
+				camara->posCam = camara->pastPosCam;
+			}
+
+			//Caballo carreta
+			if (isPointInsideSphere(camara->getPoint(), carreta->getSphere(8.0f))) {
+				camara->posCam = camara->pastPosCam;
+			}
+
+			if (isPointInsideSphere(camara->getPoint(), barrel->getSphere(5.0f))) {
+				camara->posCam = camara->pastPosCam;
+			}
+
+			/*---------------------------------------------------------------------------*/
+			/*                                                 MODELOS                                                 */
+			/*---------------------------------------------------------------------------*/
+
+			cantina->Draw(camara->vista, camara->proyeccion, terreno->Superficie(55, -90), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			molino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(77, 106), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			tronco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			tronco1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			tronco2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			vagon->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, -40) - 3, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			caballoNegro->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-100, -99), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			caballoBlanco->setPosX(camara->hdveo.x);
+			caballoBlanco->setPosZ(camara->hdveo.z);
+			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoBlanco->getPosX(), caballoBlanco->getPosZ()), camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
+			/*bala->setPosX(camara->posCam.x);
+			bala->setPosZ(camara->posCam.z);
+			bala->Draw(camara->vista, camara->proyeccion, camara->posCam.y, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);*/
+			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(34, 30), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			vaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(93, 30) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			pistola->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pistola->getPosX(), pistola->getPosZ()) + 2, camara->posCam, 10.0f, 2.0f, 'Y', 1, true, false);
+		}
+		else {
+			/*---------------------------------------------------------------------------*/
+			/*                                                 Billboards  tercera                                     */
+			/*---------------------------------------------------------------------------*/
+				/*ARBOLES*/
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				20, -83, terreno->Superficie(20, -83) - 1, 18, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				100, -85, terreno->Superficie(100, -85) - 1, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				-100, -60, terreno->Superficie(-100, -60) - 1, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				-30, 40, terreno->Superficie(-30, 40) - 1, 18, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				50, 90, terreno->Superficie(50, 90) - 1, 18, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbol->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				90, 0, terreno->Superficie(90, 0) - 1, 15, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+
+			/*ARBUSTOS*/
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				20, 0, terreno->Superficie(20, 0) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				80, 30, terreno->Superficie(80, 30) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				100, -40, terreno->Superficie(100, -40) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				-40, -60, terreno->Superficie(-40, -60) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				-40, 100, terreno->Superficie(-40, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				-80, 80, terreno->Superficie(-80, 80) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				-80, 100, terreno->Superficie(-80, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
+				80, 100, terreno->Superficie(-80, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+			/*-------------------------------------------------------------------------------*/
+			/*                                                  COLISIONES TERCERA                                  */
+			/*-------------------------------------------------------------------------------*/
+			//Cantina
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), cantina->getSphere(40.0f))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			//Molino
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), molino->getSphere(25.0f))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			//Carreta
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), tronco1->getSphere(25.0f))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			//Caballo negro
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), caballoNegro->getSphere(10.0f))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			//Caballo carreta
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), carreta->getSphere(22.0f))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), barrel->getSphere(15.0f))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			/*-------------------------------------------------------------------------------------------------------*/
+			/*                                                                  Modelos tercera persona                                                     */
+			/*-------------------------------------------------------------------------------------------------------*/
+			cantina->Draw(camara->vista, camara->proyeccion, terreno->Superficie(55, -90), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			molino->Draw(camara->vista, camara->proyeccion, terreno->Superficie(77, 106), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			tronco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			tronco1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			tronco2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			vagon->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, -40) - 3, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			caballoNegro->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-100, -99), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			caballoBlanco->setPosX(camara->hdveo.x);
+			caballoBlanco->setPosZ(camara->hdveo.z);
+			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoBlanco->getPosX(), caballoBlanco->getPosZ()), camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
+			/*bala->setPosX(camara->posCam3P.x);
+			bala->setPosZ(camara->posCam3P.z);
+			bala->Draw(camara->vista, camara->proyeccion, camara->posCam.y, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);*/
+			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(34, 30), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			vaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(93, 30) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			pistola->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pistola->getPosX(), pistola->getPosZ()) + 2, camara->posCam3P, 10.0f, 2.0f, 'Y', 1, true, false);
+		}
+
+		if (vidas == 3)
+			fullVida->Draw(0, 0);
+		else if (vidas == 2)
+			middleVida->Draw(0, 0);
+		else if (vidas == 1)
+			endVida->Draw(0, 0);
+		else if (vidas == 0)
+			gameOver->Draw(0, 0);
+
+		swapChain->Present(1, 0);
 	}
 
 	bool isPointInsideSphere(float* point, float* sphere) {
@@ -308,7 +601,7 @@ public:
 		descABSD.RenderTarget[0].RenderTargetWriteMask = 0x0f;
 
 		result = d3dDevice->CreateBlendState(&descABSD, &alphaBlendState);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			MessageBox(0, L"Error", L"Error al crear el blend state", MB_OK);
 			return;
@@ -333,7 +626,7 @@ public:
 		HRESULT result;
 
 		result = d3dDevice->CreateBlendState(&descCBSD, &commonBlendState);
-		if(FAILED(result))
+		if (FAILED(result))
 		{
 			MessageBox(0, L"Error", L"Error al crear el blend state", MB_OK);
 			return;
@@ -349,7 +642,7 @@ public:
 		descDSD.DepthEnable = true;
 		descDSD.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		descDSD.DepthFunc = D3D11_COMPARISON_LESS;
-		descDSD.StencilEnable=true;
+		descDSD.StencilEnable = true;
 		descDSD.StencilReadMask = 0xFF;
 		descDSD.StencilWriteMask = 0xFF;
 		descDSD.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
@@ -362,7 +655,7 @@ public:
 		descDSD.BackFace.StencilFunc = D3D11_COMPARISON_ALWAYS;
 
 		d3dDevice->CreateDepthStencilState(&descDSD, &depthStencilState);
-		
+
 		d3dContext->OMSetDepthStencilState(depthStencilState, 1);
 	}
 
@@ -373,7 +666,7 @@ public:
 		descDDSD.DepthEnable = false;
 		descDDSD.DepthWriteMask = D3D11_DEPTH_WRITE_MASK_ALL;
 		descDDSD.DepthFunc = D3D11_COMPARISON_LESS;
-		descDDSD.StencilEnable=true;
+		descDDSD.StencilEnable = true;
 		descDDSD.StencilReadMask = 0xFF;
 		descDDSD.StencilWriteMask = 0xFF;
 		descDDSD.FrontFace.StencilFailOp = D3D11_STENCIL_OP_KEEP;
