@@ -33,6 +33,7 @@ PS_Input VS_Main(VS_Input vertex)
 float4 PS_Main(PS_Input pixel) : SV_TARGET
 {
     float4 textura = color.Sample(colorSampler, pixel.uv);
-    clip(textura.a - 0.9f);
+    clip(textura.a - 0.8f);
+    
     return textura;
 }

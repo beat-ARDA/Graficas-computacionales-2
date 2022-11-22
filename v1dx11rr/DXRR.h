@@ -11,6 +11,14 @@
 #include "ModeloRR.h"
 #include "XACT3Util.h"
 #include "GUI.h"
+#include "Text.h"
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sstream>
+#include <list>
+
+using namespace std;
 
 class DXRR {
 
@@ -41,6 +49,13 @@ public:
 	GUI* middleVida;
 	GUI* endVida;
 	GUI* gameOver;
+	GUI* ganador;
+	GUI* cruz;
+	GUI* balasFull;
+	GUI* balas3;
+	GUI* balas2;
+	GUI* balas1;
+	GUI* balasEmpty;
 
 	int frameBillboard;
 
@@ -51,7 +66,6 @@ public:
 	BillboardRR* billArbusto;
 	Camara* camara;
 	ModeloRR* cantina;
-	ModeloRR* bala;
 	ModeloRR* caballoNegro;
 	ModeloRR* caballoBlanco;
 	ModeloRR* vagon;
@@ -59,13 +73,20 @@ public:
 	ModeloRR* barrel;
 	ModeloRR* carreta;
 	ModeloRR* tronco;
-	ModeloRR* vaquero;
+	ModeloRR* enemigo1;
 	ModeloRR* pistola;
 	ModeloRR* carril;
 	ModeloRR* tronco1;
 	ModeloRR* tronco2;
+	ModeloRR* bala;
+	ModeloRR* bala1;
+	ModeloRR* bala2;
+	ModeloRR* bala3;
+	ModeloRR* bala4;
+	ModeloRR* bala5;
 
 	float rotCam;
+	float rotCamX;
 	float balaRespuesta;
 	float izqder;
 	float arriaba;
@@ -78,18 +99,68 @@ public:
 	vector2 uv4[32];
 	bool setCamaraTipo;
 	bool playRevolver;
+	bool playGame = true;
+	bool ocultarBala1;
+	bool ocultarBala2;
+	bool ocultarBala3;
+	bool ocultarBala4;
+	bool ocultarBala5;
+
+	bool ocultarEnemigo1;
+	bool ocultarEnemigo2;
+	bool ocultarEnemigo3;
+	bool ocultarEnemigo4;
+	bool ocultarEnemigo5;
+
+	Text* texto;
+	Text* textoBalas;
 
 	int vidas;
+	int balas;
+	float elevacionModelo;
+	float movBala;
+	bool movBalabool;
 
 	XACTINDEX cueIndex;
 	CXACT3Util m_XACT3;
 
+	float segundos;
+
+	float movEnemigo1X;
+	float movEnemigo1Z;
+	bool movEnemigo1Dir;
+
+	float rotxAux, rotyAux, zbalaAux, ybalaAux, xbalaAux;
+
+	list<ModeloRR*> balasList;
+
 	DXRR(HWND hWnd, int Ancho, int Alto)
 	{
+		ocultarEnemigo1 = false;
+		ocultarEnemigo2 = false;
+		ocultarEnemigo3 = false;
+		ocultarEnemigo4 = false;
+		ocultarEnemigo5 = false;
+		rotxAux = 0.0f;
+		rotyAux = 0.0f;
+		movBalabool = false;
+		movBala = 0.0f;
+		movEnemigo1Dir = false;
+		movEnemigo1X = 0;
+		movEnemigo1Z = 0;
+		ocultarBala1 = false;
+		ocultarBala2 = false;
+		ocultarBala3 = false;
+		ocultarBala4 = false;
+		ocultarBala5 = false;
+		elevacionModelo = 1.0f;
+		balas = 4;
+		segundos = 301;
 		retraso = false;
-		vidas = 4;
+		vidas = 3;
 		balaRespuesta = 0.0f;
 		rotCam = 0;
+		rotCamX = 0;
 		breakpoint = false;
 		frameBillboard = 0;
 		ancho = Ancho;
@@ -117,7 +188,7 @@ public:
 																													   /*MODELOS*/
 		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 		cantina = new ModeloRR(d3dDevice, d3dContext, "Assets/saloon/Saloon (1).obj", L"Assets/saloon/saloonUVSCOLORFINAL.jpg", L"Assets/saloon/saloonUVSCOLORFINAL.jpg", L"Assets/saloon/saloonUVSNORMALFINAL.png", 59, -90);
-		bala = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->posCam3P.x, camara->posCam3P.z);
+
 		molino = new ModeloRR(d3dDevice, d3dContext, "Assets/molino/molino_sis.obj", L"Assets/molino/molinocolor.jpg", L"Assets/molino/molinocolor.jpg", L"Assets/molino/molinonormal.png", 77, 106);
 		tronco = new ModeloRR(d3dDevice, d3dContext, "Assets/tronco/troncoprueba.obj", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotexnormal.png", -55, 40);
 		tronco1 = new ModeloRR(d3dDevice, d3dContext, "Assets/tronco/troncoprueba.obj", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotex.png", L"Assets/tronco/arboltrotexnormal.png", -55, 46);
@@ -128,16 +199,36 @@ public:
 		carreta = new ModeloRR(d3dDevice, d3dContext, "Assets/carreta/carreta_obj.obj", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLORnormal.png", 80, 15);
 		carril = new ModeloRR(d3dDevice, d3dContext, "Assets/carril/carril.obj", L"Assets/carril/METAL.jpg", L"Assets/carril/METAL.jpg", L"Assets/carril/METALnormal.png", -60, -29);
 		barrel = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolornormal.png", 34, 30);
-		vaquero = new ModeloRR(d3dDevice, d3dContext, "Assets/cowboyprota/cowboyprot.obj", L"Assets/cowboyprota/coreegidod.jpg", L"Assets/cowboyprota/coreegidod.jpg", L"Assets/cowboyprota/coreegidodnormal.png", 10, 10);
+		enemigo1 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigo.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
 		pistola = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/Colt_Python.obj", L"Assets/guns/gunsuvscolorfinalFINAL.jpg", L"Assets/guns/gunsuvscolorfinalFINAL.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 0.0f, 0.0f);
+
+		bala = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
+		bala1 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", -20, 0.0);
+		bala2 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 100, -50);
+		bala3 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", -100, 50);
+		bala4 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 120, 80);
+		bala5 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", -120, -60);
 
 		fullVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_full.png");
 		middleVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_2.png");
 		endVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_1.png");
 		gameOver = new GUI(d3dDevice, d3dContext, 1, 1, L"Assets/gameover/game_over.png");
+		ganador = new GUI(d3dDevice, d3dContext, 1, 1, L"Assets/ganador/ganador.png");
+		cruz = new GUI(d3dDevice, d3dContext, 0.1, 0.05, L"Assets/cruz/cruz.png");
+		balasFull = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/balas/balas_full.png");
+		balas3 = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/balas/balas_3.png");
+		balas2 = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/balas/balas_2.png");
+		balas1 = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/balas/balas_1.png");
+		balasEmpty = new GUI(d3dDevice, d3dContext, 0.4, 0.4, L"Assets/balas/balas_empty.png");
+
+		texto = new Text(d3dDevice, d3dContext, 3.6, 1.2, L"Assets/Texto/font.jpg", XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
+		textoBalas = new Text(d3dDevice, d3dContext, 3.6, 1.2, L"Assets/Texto/font.jpg", XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f));
 
 		setCamaraTipo = false;
 		playRevolver = false;
+
+		for (int i = 0; i < 4; i++)
+			balasList.push_back(bala);
 	}
 
 	~DXRR()
@@ -316,8 +407,24 @@ public:
 
 	void Render(void)
 	{
+
+		if (!movEnemigo1Dir)
+			movEnemigo1X += 0.001;
+		if (movEnemigo1Dir)
+			movEnemigo1X -= 0.001;
+
+		if (movEnemigo1X >= 0.3)
+			movEnemigo1Dir = true;
+		if (movEnemigo1X <= -0.3)
+			movEnemigo1Dir = false;
+
+		elevacionModelo += 0.08f;
+
+		if (elevacionModelo >= 4.0f)
+			elevacionModelo = 1.0f;
 		retraso = true;
 		rotCam += izqder;
+
 		float sphere[3] = { 0,0,0 };
 		float prevPos[3] = { camara->posCam.x, camara->posCam.z, camara->posCam.z };
 		static float angle = 0.0f;
@@ -333,6 +440,7 @@ public:
 		camara->posCam.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 10;
 		camara->posCam3P.y = terreno->Superficie(camara->posCam.x, camara->posCam.z) + 15;
 		camara->UpdateCam(vel, arriaba, izqder, this->setCamaraTipo);
+
 		skydome->Update(camara->vista, camara->proyeccion);
 
 		float camPosXZ[2] = { camara->posCam.x, camara->posCam.z };
@@ -344,12 +452,14 @@ public:
 			skydome->Render(camara->posCam3P);
 		TurnOnDepth();
 		terreno->Draw(camara->vista, camara->proyeccion);
-		if (playRevolver)
+		if (playRevolver && balas >= 1)
 		{
-
 			m_XACT3.m_pSoundBank->Play(cueIndex, 0, 0, 0);
-			playRevolver = false;
+			movBalabool = true;
+			balas -= 1;
+			balasList.pop_back();
 		}
+
 		if (setCamaraTipo) {
 			/*---------------------------------------------------------------------------*/
 			/*                                                 Billboards                                                  */
@@ -426,9 +536,65 @@ public:
 				camara->posCam = camara->pastPosCam;
 			}
 
+			//Barrel
 			if (isPointInsideSphere(camara->getPoint(), barrel->getSphere(5.0f))) {
 				camara->posCam = camara->pastPosCam;
 			}
+
+			//Bala1
+			if (isPointInsideSphere(camara->getPoint(), bala1->getSphere(10))) {
+
+				if (balas >= 0 && balas <= 4 && !ocultarBala1)
+				{
+					ocultarBala1 = true;
+					balas += 1;
+				}
+			}
+
+			//Bala2
+			if (isPointInsideSphere(camara->getPoint(), bala2->getSphere(10))) {
+
+				if (balas >= 0 && balas <= 4 && !ocultarBala2)
+				{
+					ocultarBala2 = true;
+					balas += 1;
+				}
+			}
+
+			//Bala3
+			if (isPointInsideSphere(camara->getPoint(), bala3->getSphere(10))) {
+
+				if (balas >= 0 && balas <= 4 && !ocultarBala3)
+				{
+					ocultarBala3 = true;
+					balas += 1;
+				}
+			}
+
+			//Bala4
+			if (isPointInsideSphere(camara->getPoint(), bala4->getSphere(10))) {
+
+				if (balas >= 0 && balas <= 4 && !ocultarBala4)
+				{
+					ocultarBala4 = true;
+					balas += 1;
+				}
+			}
+
+			//Bala5
+			if (isPointInsideSphere(camara->getPoint(), bala5->getSphere(10))) {
+
+				if (balas >= 0 && balas <= 4 && !ocultarBala5)
+				{
+					ocultarBala5 = true;
+					balas += 1;
+				}
+			}
+
+			////Vaquero
+			//if (isPointInsideSphere(camara->getPoint(), enemigo1->getSphere(6))) {
+			//	camara->posCam = camara->pastPosCam;
+			//}
 
 			/*---------------------------------------------------------------------------*/
 			/*                                                 MODELOS                                                 */
@@ -444,14 +610,33 @@ public:
 			caballoBlanco->setPosX(camara->hdveo.x);
 			caballoBlanco->setPosZ(camara->hdveo.z);
 			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoBlanco->getPosX(), caballoBlanco->getPosZ()), camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
-			/*bala->setPosX(camara->posCam.x);
-			bala->setPosZ(camara->posCam.z);
-			bala->Draw(camara->vista, camara->proyeccion, camara->posCam.y, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);*/
+
+			if (!ocultarBala1)
+				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala2)
+				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala3)
+				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala4)
+				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala5)
+				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
 			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(34, 30), camara->posCam, 10.0f, 0, 'A', 1, true, false);
-			vaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(93, 30) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
-			pistola->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pistola->getPosX(), pistola->getPosZ()) + 2, camara->posCam, 10.0f, 2.0f, 'Y', 1, true, false);
+			if (!movEnemigo1Dir)
+				enemigo1->setPosX(enemigo1->getPosX() + movEnemigo1X);
+			if (movEnemigo1Dir)
+				enemigo1->setPosX(enemigo1->getPosX() - movEnemigo1X);
+
+			enemigo1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1->getPosX(), enemigo1->getPosZ()) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			//bala->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala->getPosX(), bala->getPosZ()) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			//pistola->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pistola->getPosX(), pistola->getPosZ()) + 2, camara->posCam, 10.0f, 2.0f, 'Y', 1, true, false);
 		}
 		else {
 			/*---------------------------------------------------------------------------*/
@@ -529,8 +714,74 @@ public:
 				camara->posCam3P = camara->pastPosCam;
 			}
 
+			//Barrel
 			if (isPointInsideSphere(caballoBlanco->getPoint(0), barrel->getSphere(15.0f))) {
 				camara->posCam3P = camara->pastPosCam;
+			}
+
+			//Bala1
+			if (isPointInsideSphere(camara->getPoint(), bala1->getSphere(10))) {
+
+				if (balas >= 0 && balas < 4 && !ocultarBala1)
+				{
+					ocultarBala1 = true;;
+					balas += 1;
+					balasList.push_back(bala);
+				}
+			}
+
+			//Bala2
+			if (isPointInsideSphere(camara->getPoint(), bala2->getSphere(10))) {
+
+				if (balas >= 0 && balas < 4 && !ocultarBala2)
+				{
+					ocultarBala2 = true;;
+					balas += 1;
+					balasList.push_back(bala);
+				}
+			}
+
+			//Bala3
+			if (isPointInsideSphere(camara->getPoint(), bala3->getSphere(10))) {
+
+				if (balas >= 0 && balas < 4 && !ocultarBala3)
+				{
+					ocultarBala3 = true;;
+					balas += 1;
+					balasList.push_back(bala);
+				}
+			}
+
+			//Bala4
+			if (isPointInsideSphere(camara->getPoint(), bala4->getSphere(10))) {
+
+				if (balas >= 0 && balas < 4 && !ocultarBala4)
+				{
+					ocultarBala4 = true;;
+					balas += 1;
+					balasList.push_back(bala);
+				}
+			}
+
+			//Bala5
+			if (isPointInsideSphere(camara->getPoint(), bala5->getSphere(10))) {
+
+				if (balas >= 0 && balas < 4 && !ocultarBala5)
+				{
+					ocultarBala5 = true;
+					balas += 1;
+					balasList.push_back(bala);
+				}
+			}
+
+			//Enemigo
+			if (isPointInsideSphere(caballoBlanco->getPoint(0), enemigo1->getSphere(15))) {
+				camara->posCam3P = camara->pastPosCam;
+			}
+
+			//Enemigo1
+			if (isPointInsideSphere(bala->getPointBala(), enemigo1->getSphere(15))) {
+				ocultarEnemigo1 = true;
 			}
 
 			/*-------------------------------------------------------------------------------------------------------*/
@@ -546,25 +797,89 @@ public:
 			caballoBlanco->setPosX(camara->hdveo.x);
 			caballoBlanco->setPosZ(camara->hdveo.z);
 			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoBlanco->getPosX(), caballoBlanco->getPosZ()), camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
-			/*bala->setPosX(camara->posCam3P.x);
-			bala->setPosZ(camara->posCam3P.z);
-			bala->Draw(camara->vista, camara->proyeccion, camara->posCam.y, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);*/
+
+			if (!ocultarBala1)
+				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala2)
+				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala3)
+				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala4)
+				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
+			if (!ocultarBala5)
+				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+
 			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
-			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(34, 30), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
-			vaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(93, 30) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
-			pistola->Draw(camara->vista, camara->proyeccion, terreno->Superficie(pistola->getPosX(), pistola->getPosZ()) + 2, camara->posCam3P, 10.0f, 2.0f, 'Y', 1, true, false);
+			//barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(34, 30), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			if (!ocultarEnemigo1) {
+				if (!movEnemigo1Dir)
+					enemigo1->setPosX(enemigo1->getPosX() + movEnemigo1X);
+				if (movEnemigo1Dir)
+					enemigo1->setPosX(enemigo1->getPosX() - movEnemigo1X);
+				enemigo1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1->getPosX(), enemigo1->getPosZ()) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			}
+
+			if (!movBalabool)
+			{
+				bala->setPosX(camara->hdveo.x);
+				bala->setPosZ(camara->hdveo.z);
+				bala->(camara->vista, camara->proyeccion, camara->hdveo.y, camara->posCam3P, 10.0f, rotCam + XM_PI, -(rotCamX - XM_PIDIV2), 1, this->setCamaraTipo, true);
+				rotxAux = rotCamX;
+				rotyAux = rotCam;
+				xbalaAux = camara->hdveo.x;
+				zbalaAux = camara->hdveo.z;
+				ybalaAux = camara->hdveo.y;
+			}
+			else
+			{
+				movBala += 1.5f;
+				bala->setPosX(xbalaAux);
+				bala->setPosZDisparo(zbalaAux + movBala);
+				bala->Disparo(camara->vista, camara->proyeccion, ybalaAux, camara->posCam3P, 10.0f, rotyAux + XM_PI, 1);
+			}
 		}
+		/*if (playGame)
+			segundos -= 0.2;*/
+		std::string tiempo = texto->Time(segundos);
+
+		stringstream txtbala;
+		txtbala << balas;
+
+		string numBalas = txtbala.str();
 
 		if (vidas == 3)
-			fullVida->Draw(0, 0);
-		else if (vidas == 2)
-			middleVida->Draw(0, 0);
-		else if (vidas == 1)
-			endVida->Draw(0, 0);
-		else if (vidas == 0)
+			fullVida->Draw(-0.8, 0.9);
+		if (vidas == 2)
+			middleVida->Draw(-0.8, 0.9);
+		if (vidas == 1)
+			endVida->Draw(-0.8, 0.9);
+		if (vidas == 0 || tiempo == "0:00")
+		{
+			playGame = false;;
 			gameOver->Draw(0, 0);
+		}
 
+		if (balas == 4)
+			balasFull->Draw(0.85, -0.85);
+		if (balas == 3)
+			balas3->Draw(0.85, -0.85);
+		if (balas == 2)
+			balas2->Draw(0.85, -0.85);
+		if (balas == 1)
+			balas1->Draw(0.85, -0.85);
+		if (balas == 0)
+			balasEmpty->Draw(0.85, -0.85);
+
+		cruz->Draw(0, 0);
+
+		texto->DrawText(0.3, 0.95, "Tiempo de juego restante: " + tiempo, 0.010f);
+		textoBalas->DrawText(-0.3, 0.95, "Cantidad de balas: " + numBalas, 0.010f);
+		playRevolver = false;
 		swapChain->Present(1, 0);
 	}
 
@@ -742,6 +1057,5 @@ public:
 			uv4[j + 24].v = 1;
 		}
 	}
-
 };
 #endif

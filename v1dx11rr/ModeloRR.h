@@ -79,6 +79,11 @@ private:
 
 	float posX;
 	float posZ;
+	float posY;
+
+	float posZDisparo;
+	float xGuardado;
+	float zGuardado;
 	float sphere[3];
 public:
 
@@ -98,6 +103,12 @@ public:
 		return point;
 	}
 
+	float* getPointBala() {
+		point[0] = xGuardado;
+		point[1] = zGuardado;
+		return point;
+	}
+
 	ModeloRR(ID3D11Device* D3DDevice, ID3D11DeviceContext* D3DContext, char* ModelPath, WCHAR* colorTexturePath, WCHAR* specularTexturePath, WCHAR* normalTexturePath, float _posX, float _posZ)
 	{
 		//copiamos el device y el device context a la clase terreno
@@ -114,7 +125,7 @@ public:
 		m_ColorDifuso = XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f);
 
 		//aqui cargamos las texturas de alturas y el cesped
-		CargaParametros(ModelPath, colorTexturePath, specularTexturePath, normalTexturePath);//L"Assets/Tent-Tower/tent_diffuse.jpg"
+		CargaParametros(ModelPath, colorTexturePath, specularTexturePath, normalTexturePath);
 	}
 
 	~ModeloRR()
@@ -132,12 +143,20 @@ public:
 		return this->posZ;
 	}
 
+	float getPosY() {
+		return this->posZ;
+	}
+
 	void setPosX(float posX) {
 		this->posX = posX;
 	}
 
 	void setPosZ(float posZ) {
 		this->posZ = posZ;
+	}
+
+	void setPosZDisparo(float posZ) {
+		this->posZDisparo = posZ;
 	}
 
 	bool CompileD3DShader(WCHAR* filePath, char* entry, char* shaderModel, ID3DBlob** buffer)
@@ -420,6 +439,170 @@ public:
 
 	}
 
+	void Disparo(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float roty, float scale)
+	{
+		unsigned int stride = sizeof(VertexObj);
+		unsigned int offset = 0;
+
+		camPos.x = posCam.x;
+		camPos.y = posCam.y;
+		camPos.z = posCam.z;
+
+		//define la estructura del vertice a traves de layout
+		d3dContext->IASetInputLayout(inputLayout);
+
+		//define con que buffer trabajara
+		d3dContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+		//define la forma de conexion de los vertices
+		d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		//Establece el vertex y pixel shader que utilizara
+		d3dContext->VSSetShader(VertexShaderVS, 0, 0);
+		d3dContext->PSSetShader(solidColorPS, 0, 0);
+		//pasa lo sbuffers al shader
+		d3dContext->PSSetShaderResources(0, 1, &colorMap);
+		d3dContext->PSSetShaderResources(1, 1, &specMap);
+		d3dContext->PSSetShaderResources(2, 1, &normalMap);
+
+		d3dContext->PSSetSamplers(0, 1, &colorMapSampler);
+
+		D3DXMATRIX traslationBala;
+		D3DXMatrixTranslation(&traslationBala, 0.0, 0.0, posZDisparo);
+
+		D3DXMATRIX rotationMatY;
+		D3DXMatrixRotationYawPitchRoll(&rotationMatY, 0.0f, 0.0f, 0.0f);
+
+		D3DXMATRIX translationMat;
+		D3DXMatrixTranslation(&translationMat, posX, ypos, posZ);
+
+		D3DXMatrixRotationY(&rotationMatY, roty);
+
+		D3DXMATRIX scaleMat;
+		D3DXMatrixScaling(&scaleMat, scale, scale * 1.2f, scale);
+
+		D3DXMATRIX worldMat = traslationBala * rotationMatY * scaleMat * translationMat;
+
+		xGuardado = worldMat.m[3][0];
+		zGuardado = worldMat.m[3][2];
+
+		D3DXMatrixTranspose(&worldMat, &worldMat);
+		//actualiza los buffers del shader
+		d3dContext->UpdateSubresource(worldCB, 0, 0, &worldMat, 0, 0);
+		d3dContext->UpdateSubresource(viewCB, 0, 0, &vista, 0, 0);
+		d3dContext->UpdateSubresource(projCB, 0, 0, &proyeccion, 0, 0);
+		d3dContext->UpdateSubresource(cameraPosCB, 0, 0, &camPos, 0, 0);
+		d3dContext->UpdateSubresource(specForceCB, 0, 0, &specForce, 0, 0);
+		d3dContext->UpdateSubresource(m_pColorDifusoCB, 0, 0, &m_ColorDifuso, 0, 0);
+		d3dContext->UpdateSubresource(m_pMagnitudEspecular, 0, 0, &magnitudEspecular, 0, 0);
+		d3dContext->UpdateSubresource(m_pLightPosCB, 0, 0, &m_LightPos, 0, 0);
+
+		//le pasa al shader los buffers
+		d3dContext->VSSetConstantBuffers(0, 1, &worldCB);
+		d3dContext->VSSetConstantBuffers(1, 1, &viewCB);
+		d3dContext->VSSetConstantBuffers(2, 1, &projCB);
+		d3dContext->VSSetConstantBuffers(3, 1, &cameraPosCB);
+		d3dContext->VSSetConstantBuffers(4, 1, &specForceCB);
+		d3dContext->VSSetConstantBuffers(5, 1, &m_pColorDifusoCB);
+		d3dContext->VSSetConstantBuffers(6, 1, &m_pLightPosCB);
+		d3dContext->PSSetConstantBuffers(0, 1, &m_pMagnitudEspecular);
+		//cantidad de trabajos
+
+		d3dContext->Draw(m_ObjParser.m_nVertexCount, 0);
+	}
+
+	void BalaCentro(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float roty, float rotx, float scale, bool camaraTipo, bool moveCam)
+	{
+		static float rotation = 0.0f;
+		rotation += 0.01;
+
+		//paso de datos, es decir cuanto es el ancho de la estructura
+		unsigned int stride = sizeof(VertexObj);
+		unsigned int offset = 0;
+
+		camPos.x = posCam.x;
+		camPos.y = posCam.y;
+		camPos.z = posCam.z;
+
+		//define la estructura del vertice a traves de layout
+		d3dContext->IASetInputLayout(inputLayout);
+
+		//define con que buffer trabajara
+		d3dContext->IASetVertexBuffers(0, 1, &vertexBuffer, &stride, &offset);
+
+		//define la forma de conexion de los vertices
+		d3dContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+		//Establece el vertex y pixel shader que utilizara
+		d3dContext->VSSetShader(VertexShaderVS, 0, 0);
+		d3dContext->PSSetShader(solidColorPS, 0, 0);
+		//pasa lo sbuffers al shader
+		d3dContext->PSSetShaderResources(0, 1, &colorMap);
+		d3dContext->PSSetShaderResources(1, 1, &specMap);
+		d3dContext->PSSetShaderResources(2, 1, &normalMap);
+
+		d3dContext->PSSetSamplers(0, 1, &colorMapSampler);
+
+		//Ajuste
+		D3DXMATRIX traslationRotCam;
+		if (camaraTipo) {
+			D3DXMatrixTranslation(&traslationRotCam, 0.0, 0.0, 0.0);
+		}
+		else {
+			D3DXMatrixTranslation(&traslationRotCam, 0.0, 0.0f, 0.0f);
+		}
+
+		//mueve la camara
+		D3DXMATRIX rotationMatY, rotationMatX;
+		D3DXMatrixRotationYawPitchRoll(&rotationMatY, 0.0f, 0.0f, 0.0f);
+		D3DXMatrixRotationYawPitchRoll(&rotationMatX, 0.0f, 0.0f, 0.0f);
+		D3DXMATRIX translationMat;
+
+
+		D3DXMatrixTranslation(&translationMat, posX, ypos, posZ);
+
+		D3DXMatrixRotationY(&rotationMatY, roty);
+		D3DXMatrixRotationX(&rotationMatX, rotx);
+
+		//viewMatrix *= rotationMat;
+
+		D3DXMATRIX scaleMat;
+		D3DXMatrixScaling(&scaleMat, scale, scale * 1.2f, scale);
+
+		D3DXMATRIX worldMat = rotationMatY * scaleMat * translationMat;
+
+		if (moveCam) {
+			worldMat = traslationRotCam * rotationMatY * scaleMat * translationMat;
+		}
+		else {
+			worldMat = rotationMatY * scaleMat * translationMat;
+		}
+
+		D3DXMatrixTranspose(&worldMat, &worldMat);
+		//actualiza los buffers del shader
+		d3dContext->UpdateSubresource(worldCB, 0, 0, &worldMat, 0, 0);
+		d3dContext->UpdateSubresource(viewCB, 0, 0, &vista, 0, 0);
+		d3dContext->UpdateSubresource(projCB, 0, 0, &proyeccion, 0, 0);
+		d3dContext->UpdateSubresource(cameraPosCB, 0, 0, &camPos, 0, 0);
+		d3dContext->UpdateSubresource(specForceCB, 0, 0, &specForce, 0, 0);
+		d3dContext->UpdateSubresource(m_pColorDifusoCB, 0, 0, &m_ColorDifuso, 0, 0);
+		d3dContext->UpdateSubresource(m_pMagnitudEspecular, 0, 0, &magnitudEspecular, 0, 0);
+		d3dContext->UpdateSubresource(m_pLightPosCB, 0, 0, &m_LightPos, 0, 0);
+
+		//le pasa al shader los buffers
+		d3dContext->VSSetConstantBuffers(0, 1, &worldCB);
+		d3dContext->VSSetConstantBuffers(1, 1, &viewCB);
+		d3dContext->VSSetConstantBuffers(2, 1, &projCB);
+		d3dContext->VSSetConstantBuffers(3, 1, &cameraPosCB);
+		d3dContext->VSSetConstantBuffers(4, 1, &specForceCB);
+		d3dContext->VSSetConstantBuffers(5, 1, &m_pColorDifusoCB);
+		d3dContext->VSSetConstantBuffers(6, 1, &m_pLightPosCB);
+		d3dContext->PSSetConstantBuffers(0, 1, &m_pMagnitudEspecular);
+		//cantidad de trabajos
+
+		d3dContext->Draw(m_ObjParser.m_nVertexCount, 0);
+	}
+
 	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float rot, char angle, float scale, bool camaraTipo, bool moveCam)
 	{
 		static float rotation = 0.0f;
@@ -465,6 +648,8 @@ public:
 		D3DXMATRIX rotationMat;
 		D3DXMatrixRotationYawPitchRoll(&rotationMat, 0.0f, 0.0f, 0.0f);
 		D3DXMATRIX translationMat;
+
+
 		D3DXMatrixTranslation(&translationMat, posX, ypos, posZ);
 		if (angle == 'X')
 			D3DXMatrixRotationX(&rotationMat, rot);

@@ -165,7 +165,19 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	{
 
 	} break;
-
+	case WM_KEYDOWN:
+	{
+		if (wParam == VK_SPACE)
+		{
+			if (!dxrr->playGame)
+			{
+				dxrr->playGame = true;
+				dxrr->segundos = 3;
+				dxrr->segundos = 301;
+			}
+		}
+	}
+	break;
 	case WM_LBUTTONDOWN: {
 		dxrr->playRevolver = true;
 	}break;

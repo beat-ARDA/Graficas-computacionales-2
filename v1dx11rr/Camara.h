@@ -116,6 +116,7 @@ public:
 		D3DXVec3Normalize(&refFront, &refFront);
 
 
+
 		//ajustamos la matriz de vista con lo obtenido
 		posCam += refFront * vel / 10.0;
 
