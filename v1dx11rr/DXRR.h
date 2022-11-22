@@ -828,7 +828,7 @@ public:
 			{
 				bala->setPosX(camara->hdveo.x);
 				bala->setPosZ(camara->hdveo.z);
-				bala->(camara->vista, camara->proyeccion, camara->hdveo.y, camara->posCam3P, 10.0f, rotCam + XM_PI, -(rotCamX - XM_PIDIV2), 1, this->setCamaraTipo, true);
+				bala->Draw(camara->vista, camara->proyeccion, camara->hdveo.y, camara->posCam3P, 10.0f, rotCam + XM_PI, -(rotCamX - XM_PIDIV2), 1, this->setCamaraTipo, true);
 				rotxAux = rotCamX;
 				rotyAux = rotCam;
 				xbalaAux = camara->hdveo.x;

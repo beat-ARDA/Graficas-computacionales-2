@@ -2,21 +2,21 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\e-arduron\Desktop\MIO\Sem Ago-Dic 2022\Graficas computacionales 2\PLANTILLA PROYECTO 01 - copia\TerrenoSkyBillModGC2\x64\Debug\TerrenoSkyBill.exe</FullPath>
+      <FullPath>C:\Users\e-arduron\Desktop\Graficas-computacionales-2\x64\Debug\TerrenoSkyBill.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles>
     <ContentFile>
-      <FullPath>C:\Users\e-arduron\Desktop\MIO\Sem Ago-Dic 2022\Graficas computacionales 2\PLANTILLA PROYECTO 01 - copia\TerrenoSkyBillModGC2\x64\Debug\Billboard.cso</FullPath>
+      <FullPath>C:\Users\e-arduron\Desktop\Graficas-computacionales-2\x64\Debug\Billboard.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\e-arduron\Desktop\MIO\Sem Ago-Dic 2022\Graficas computacionales 2\PLANTILLA PROYECTO 01 - copia\TerrenoSkyBillModGC2\x64\Debug\GUI.cso</FullPath>
+      <FullPath>C:\Users\e-arduron\Desktop\Graficas-computacionales-2\x64\Debug\GUI.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\e-arduron\Desktop\MIO\Sem Ago-Dic 2022\Graficas computacionales 2\PLANTILLA PROYECTO 01 - copia\TerrenoSkyBillModGC2\x64\Debug\Modelo.cso</FullPath>
+      <FullPath>C:\Users\e-arduron\Desktop\Graficas-computacionales-2\x64\Debug\Modelo.cso</FullPath>
     </ContentFile>
     <ContentFile>
-      <FullPath>C:\Users\e-arduron\Desktop\MIO\Sem Ago-Dic 2022\Graficas computacionales 2\PLANTILLA PROYECTO 01 - copia\TerrenoSkyBillModGC2\x64\Debug\Text.cso</FullPath>
+      <FullPath>C:\Users\e-arduron\Desktop\Graficas-computacionales-2\x64\Debug\Text.cso</FullPath>
     </ContentFile>
   </ContentFiles>
   <SatelliteDlls />
