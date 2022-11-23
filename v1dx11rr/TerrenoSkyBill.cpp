@@ -167,6 +167,8 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 	} break;
 	case WM_KEYDOWN:
 	{
+		char keyboardData[256];
+		m_pKeyboardDevice->GetDeviceState(sizeof(keyboardData), (void*)&keyboardData);
 		if (wParam == VK_SPACE)
 		{
 			if (!dxrr->playGame)
@@ -174,7 +176,26 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 				dxrr->playGame = true;
 				dxrr->segundos = 3;
 				dxrr->segundos = 301;
+				dxrr->balas = 4;
+				dxrr->vidas = 3;
+				dxrr->cantidadEnemigos = 4;
+				dxrr->ocultarBala1 = false;
+				dxrr->ocultarBala2 = false;
+				dxrr->ocultarBala3 = false;
+				dxrr->ocultarBala4 = false;
+				dxrr->ocultarBala5 = false;
+				dxrr->ocultarEnemigo1 = false;
+				dxrr->ocultarEnemigo2 = false;
+				dxrr->ocultarEnemigo3 = false;
+				dxrr->ocultarEnemigo4 = false;
+				dxrr->movBala[0] = 0.0f;
+				dxrr->movBala[1] = 0.0f;
+				dxrr->movBala[2] = 0.0f;
+				dxrr->movBala[3] = 0.0f;
 			}
+		}
+		else if (keyboardData[DIK_T] & 0x80) {
+			dxrr->setCamaraTipo = !dxrr->setCamaraTipo;
 		}
 	}
 	break;
@@ -206,10 +227,6 @@ LRESULT CALLBACK WindowProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 		if (keyboardData[DIK_B] & 0x80) {
 			dxrr->breakpoint = true;
-		}
-
-		if (keyboardData[DIK_T] & 0x80) {
-			dxrr->setCamaraTipo = !dxrr->setCamaraTipo;
 		}
 
 		if (keyboardData[DIK_ESCAPE] & 0x80) {
