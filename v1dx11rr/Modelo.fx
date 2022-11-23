@@ -142,5 +142,5 @@ float4 PS_Main(PS_Input frag) : SV_TARGET
     //Final
     float3 iluminacionFinal = lightAmbiental + lightDifusa + lightEspecular;
 
-    return float4(textura.r, textura.g, textura.b, 1.0f) * float4(iluminacionFinal, 1.0f);
+    return float4(textura.r, textura.g, textura.b, 0.0f) * float4(iluminacionFinal, 0.0f);
 }

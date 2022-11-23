@@ -170,42 +170,50 @@ C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(632,45): w
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(635,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(638,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(641,44): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1127,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1130,41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1133,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1136,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1139,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1142,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1145,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1148,44): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1633,1): warning C4305: '-=': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1634,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1647,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1649,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1651,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1660,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1662,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1664,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1666,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1668,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1672,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1673,1): warning C4305: 'argument': truncation from 'double' to 'float'
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1806,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1807,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1808,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1042,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1061,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1080,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1099,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1129,39): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1132,41): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1135,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1138,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1141,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1144,43): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1147,45): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1150,44): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1548,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1568,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1588,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1608,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1636,1): warning C4305: '-=': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1637,36): warning C4244: 'argument': conversion from 'float' to 'int', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1650,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1652,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1654,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1663,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1665,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1667,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1669,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1671,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1675,1): warning C4305: 'argument': truncation from 'double' to 'float'
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1676,1): warning C4305: 'argument': truncation from 'double' to 'float'
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1809,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1817,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1818,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1819,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1810,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1811,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1812,24): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1820,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1829,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1830,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1831,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1821,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1822,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1823,28): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1832,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1841,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1842,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1843,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1833,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1834,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1835,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1844,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1845,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1846,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\DXRR.h(1847,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
   C:\Program Files (x86)\Microsoft DirectX SDK (June 2010)\Include\dinput.h: DIRECTINPUT_VERSION undefined. Defaulting to version 0x0800
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\TerrenoSkyBill.cpp(146,12): warning C4244: 'return': conversion from 'WPARAM' to 'int', possible loss of data
 C:\Users\e-arduron\Desktop\Graficas-computacionales-2\v1dx11rr\TerrenoSkyBill.cpp(247,17): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data

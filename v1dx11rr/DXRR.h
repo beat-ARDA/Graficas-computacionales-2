@@ -836,7 +836,7 @@ public:
 			}
 
 			//Enemigo1
-			if (isPointInsideSphere(camara->getPoint(), enemigo1->getSphere(20)) && !enemigoDisparo1 && !ocultarEnemigo1 && playGame) {
+			if (isPointInsideSphere(camara->getPoint(), enemigo1->getSphere(35)) && !enemigoDisparo1 && !ocultarEnemigo1 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = true;
 				enemigoDisparo2 = false;
@@ -845,7 +845,7 @@ public:
 			}
 
 			//Enemigo2
-			if (isPointInsideSphere(camara->getPoint(), enemigo2->getSphere(20)) && !enemigoDisparo2 && !ocultarEnemigo2 && playGame) {
+			if (isPointInsideSphere(camara->getPoint(), enemigo2->getSphere(35)) && !enemigoDisparo2 && !ocultarEnemigo2 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = false;
 				enemigoDisparo2 = true;
@@ -854,7 +854,7 @@ public:
 			}
 
 			//Enemigo3
-			if (isPointInsideSphere(camara->getPoint(), enemigo3->getSphere(20)) && !enemigoDisparo3 && !ocultarEnemigo3 && playGame) {
+			if (isPointInsideSphere(camara->getPoint(), enemigo3->getSphere(35)) && !enemigoDisparo3 && !ocultarEnemigo3 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = false;
 				enemigoDisparo2 = false;
@@ -863,7 +863,7 @@ public:
 			}
 
 			//Enemigo4
-			if (isPointInsideSphere(camara->getPoint(), enemigo4->getSphere(20)) && !enemigoDisparo4 && !ocultarEnemigo4 && playGame) {
+			if (isPointInsideSphere(camara->getPoint(), enemigo4->getSphere(35)) && !enemigoDisparo4 && !ocultarEnemigo4 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = false;
 				enemigoDisparo2 = false;
@@ -966,7 +966,7 @@ public:
 			tronco1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			tronco2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			vagon->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, -40) - 3, camara->posCam, 10.0f, 0, 'A', 1, true, false);
-			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-100, -99), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoBlanco->getPosX(), caballoBlanco->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			caballoNegro->setPosX(camara->hdveo.x);
 			caballoNegro->setPosZ(camara->hdveo.z);
 			caballoNegro->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoNegro->getPosX(), caballoNegro->getPosZ()), camara->posCam, 10.0f, rotCam + XM_PI + XM_PIDIV4, 'Y', 1, this->setCamaraTipo, true);
@@ -1022,6 +1022,7 @@ public:
 					enemigo4->setPosX(enemigo4->getPosX() - movEnemigo4X);
 				enemigo4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4->getPosX(), enemigo4->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
 			}
+			TurnOnAlphaBlending();
 			/*-----------------------------------------*/
 			/*                          BALAS 4                      */
 			/*-----------------------------------------*/
@@ -1035,10 +1036,10 @@ public:
 				ybalaAux[3] = camara->hdveo.y;
 			}
 			if (balas == 3 && movBalabool[3]) {
-				movBala[3] += 1.9f;
+				movBala[3] += 15.0f;
 				ristraBalas[3]->setPosX(xbalaAux[3]);
 				ristraBalas[3]->setPosZDisparo(zbalaAux[3] + movBala[3]);
-				ristraBalas[3]->Disparo(camara->vista, camara->proyeccion, ybalaAux[3], camara->posCam, 10.0f, rotyAux[3] + XM_PI, 1);
+				ristraBalas[3]->Disparo(camara->vista, camara->proyeccion, ybalaAux[3], camara->posCam, 10.0f, rotyAux[3] + XM_PI, 0.1);
 			}
 
 			/*-----------------------------------------*/
@@ -1054,10 +1055,10 @@ public:
 				ybalaAux[2] = camara->hdveo.y;
 			}
 			if (balas == 2 && movBalabool[2]) {
-				movBala[2] += 1.9f;
+				movBala[2] += 15.0f;
 				ristraBalas[2]->setPosX(xbalaAux[2]);
 				ristraBalas[2]->setPosZDisparo(zbalaAux[2] + movBala[2]);
-				ristraBalas[2]->Disparo(camara->vista, camara->proyeccion, ybalaAux[2], camara->posCam, 10.0f, rotyAux[2] + XM_PI, 1);
+				ristraBalas[2]->Disparo(camara->vista, camara->proyeccion, ybalaAux[2], camara->posCam, 10.0f, rotyAux[2] + XM_PI, 0.1);
 			}
 
 			/*-----------------------------------------*/
@@ -1073,10 +1074,10 @@ public:
 				ybalaAux[1] = camara->hdveo.y;
 			}
 			if (balas == 1 && movBalabool[1]) {
-				movBala[1] += 1.9f;
+				movBala[1] += 15.0f;
 				ristraBalas[1]->setPosX(xbalaAux[1]);
 				ristraBalas[1]->setPosZDisparo(zbalaAux[1] + movBala[1]);
-				ristraBalas[1]->Disparo(camara->vista, camara->proyeccion, ybalaAux[1], camara->posCam, 10.0f, rotyAux[1] + XM_PI, 1);
+				ristraBalas[1]->Disparo(camara->vista, camara->proyeccion, ybalaAux[1], camara->posCam, 10.0f, rotyAux[1] + XM_PI, 0.1);
 			}
 
 			/*-----------------------------------------*/
@@ -1092,11 +1093,12 @@ public:
 				ybalaAux[0] = camara->hdveo.y;
 			}
 			if (balas == 0 && movBalabool[0]) {
-				movBala[0] += 1.9f;
+				movBala[0] += 15.0f;
 				ristraBalas[0]->setPosX(xbalaAux[0]);
 				ristraBalas[0]->setPosZDisparo(zbalaAux[0] + movBala[0]);
-				ristraBalas[0]->Disparo(camara->vista, camara->proyeccion, ybalaAux[0], camara->posCam, 10.0f, rotyAux[0] + XM_PI, 1);
+				ristraBalas[0]->Disparo(camara->vista, camara->proyeccion, ybalaAux[0], camara->posCam, 10.0f, rotyAux[0] + XM_PI, 0.1);
 			}
+			TurnOffAlphaBlending();
 		}
 		else {
 			/*---------------------------------------------------------------------------*/
@@ -1343,7 +1345,7 @@ public:
 			}
 
 			//Enemigo disparo
-			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo1->getSphere(20)) && !enemigoDisparo1 && !ocultarEnemigo1 && playGame) {
+			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo1->getSphere(35)) && !enemigoDisparo1 && !ocultarEnemigo1 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = true;
 				enemigoDisparo2 = false;
@@ -1352,7 +1354,7 @@ public:
 			}
 
 			//Enemigo disparo
-			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo2->getSphere(20)) && !enemigoDisparo2 && !ocultarEnemigo2 && playGame) {
+			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo2->getSphere(35)) && !enemigoDisparo2 && !ocultarEnemigo2 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = false;
 				enemigoDisparo2 = true;
@@ -1361,7 +1363,7 @@ public:
 			}
 
 			//Enemigo disparo
-			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo3->getSphere(20)) && !enemigoDisparo3 && !ocultarEnemigo3 && playGame) {
+			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo3->getSphere(35)) && !enemigoDisparo3 && !ocultarEnemigo3 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = false;
 				enemigoDisparo2 = false;
@@ -1370,7 +1372,7 @@ public:
 			}
 
 			//Enemigo disparo
-			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo4->getSphere(20)) && !enemigoDisparo4 && !ocultarEnemigo4 && playGame) {
+			if (isPointInsideSphere(caballoVaquero->getPoint(0), enemigo4->getSphere(35)) && !enemigoDisparo4 && !ocultarEnemigo4 && playGame) {
 				vidas -= 1;
 				enemigoDisparo1 = false;
 				enemigoDisparo2 = false;
@@ -1473,7 +1475,7 @@ public:
 			tronco1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 			tronco2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, 40) + 4, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 			vagon->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-55, -40) - 3, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
-			caballoNegro->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-100, -99), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			caballoBlanco->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoBlanco->getPosX(), caballoBlanco->getPosZ()), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 			caballoVaquero->setPosX(camara->hdveo.x);
 			caballoVaquero->setPosZ(camara->hdveo.z);
 			caballoVaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoVaquero->getPosX(), caballoVaquero->getPosZ()), camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
@@ -1525,6 +1527,7 @@ public:
 					enemigo4->setPosX(enemigo4->getPosX() - movEnemigo4X);
 				enemigo4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4->getPosX(), enemigo4->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
 			}
+			TurnOnAlphaBlending();
 			/*-----------------------------------------*/
 			/*                          BALAS 4                      */
 			/*-----------------------------------------*/
@@ -1539,10 +1542,10 @@ public:
 				movBala[3] = 0.0f;
 			}
 			if (balas == 3 && movBalabool[3]) {
-				movBala[3] += 1.9f;
+				movBala[3] += 15.0f;
 				ristraBalas[3]->setPosX(xbalaAux[3]);
 				ristraBalas[3]->setPosZDisparo(zbalaAux[3] + movBala[3]);
-				ristraBalas[3]->Disparo(camara->vista, camara->proyeccion, ybalaAux[3], camara->posCam3P, 10.0f, rotyAux[3] + XM_PI, 1);
+				ristraBalas[3]->Disparo(camara->vista, camara->proyeccion, ybalaAux[3], camara->posCam3P, 10.0f, rotyAux[3] + XM_PI, 0.1);
 			}
 
 			/*-----------------------------------------*/
@@ -1559,10 +1562,10 @@ public:
 				movBala[2] = 0.0f;
 			}
 			if (balas == 2 && movBalabool[2]) {
-				movBala[2] += 1.9f;
+				movBala[2] += 15.0f;
 				ristraBalas[2]->setPosX(xbalaAux[2]);
 				ristraBalas[2]->setPosZDisparo(zbalaAux[2] + movBala[2]);
-				ristraBalas[2]->Disparo(camara->vista, camara->proyeccion, ybalaAux[2], camara->posCam3P, 10.0f, rotyAux[2] + XM_PI, 1);
+				ristraBalas[2]->Disparo(camara->vista, camara->proyeccion, ybalaAux[2], camara->posCam3P, 10.0f, rotyAux[2] + XM_PI, 0.1);
 			}
 
 			/*-----------------------------------------*/
@@ -1579,10 +1582,10 @@ public:
 				movBala[1] = 0.0f;
 			}
 			if (balas == 1 && movBalabool[1]) {
-				movBala[1] += 1.9f;
+				movBala[1] += 15.0f;
 				ristraBalas[1]->setPosX(xbalaAux[1]);
 				ristraBalas[1]->setPosZDisparo(zbalaAux[1] + movBala[1]);
-				ristraBalas[1]->Disparo(camara->vista, camara->proyeccion, ybalaAux[1], camara->posCam3P, 10.0f, rotyAux[1] + XM_PI, 1);
+				ristraBalas[1]->Disparo(camara->vista, camara->proyeccion, ybalaAux[1], camara->posCam3P, 10.0f, rotyAux[1] + XM_PI, 0.1);
 			}
 
 			/*-----------------------------------------*/
@@ -1599,12 +1602,12 @@ public:
 				movBala[0] = 0.0f;
 			}
 			if (balas == 0 && movBalabool[0]) {
-				movBala[0] += 1.9f;
+				movBala[0] += 15.0f;
 				ristraBalas[0]->setPosX(xbalaAux[0]);
 				ristraBalas[0]->setPosZDisparo(zbalaAux[0] + movBala[0]);
-				ristraBalas[0]->Disparo(camara->vista, camara->proyeccion, ybalaAux[0], camara->posCam3P, 10.0f, rotyAux[0] + XM_PI, 1);
+				ristraBalas[0]->Disparo(camara->vista, camara->proyeccion, ybalaAux[0], camara->posCam3P, 10.0f, rotyAux[0] + XM_PI, 0.1);
 			}
-
+			TurnOffAlphaBlending();
 		}
 
 		//LIMITE TERRENO
