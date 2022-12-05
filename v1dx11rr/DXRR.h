@@ -17,6 +17,7 @@
 #include <stdlib.h>
 #include <sstream>
 #include <list>
+#include "Water.h"
 
 using namespace std;
 
@@ -59,11 +60,13 @@ public:
 
 	int frameBillboard;
 
+	WaterRR* water;
 	TerrenoRR* terreno;
 	SkyDome* skydome;
 	BillboardRR* billboard;
 	BillboardRR* billArbol;
 	BillboardRR* billArbusto;
+	BillboardRR* billBola;
 	Camara* camara;
 	ModeloRR* cantina;
 	ModeloRR* caballoNegro;
@@ -101,6 +104,8 @@ public:
 	ModeloRR* enemigo3Pos3;
 	ModeloRR* enemigo4Pos2;
 	ModeloRR* enemigo4Pos3;
+	XMFLOAT3 lightDirection;
+	XMFLOAT3 lightColor;
 
 	float rotCam;
 	float rotCamX;
@@ -180,6 +185,8 @@ public:
 
 	DXRR(HWND hWnd, int Ancho, int Alto)
 	{
+		lightColor = XMFLOAT3(253.0f / 255.0f, 248.0f / 255.0f, 223.0f / 255.0f);
+		lightDirection = XMFLOAT3(-0.2f, -1.0f, -0.3f);
 		selectPos1 = 1;
 		selectPos2 = 1;
 		selectPos3 = 1;
@@ -251,12 +258,17 @@ public:
 		camara = new Camara(D3DXVECTOR3(0, 80, 6), D3DXVECTOR3(0, 80, 0), D3DXVECTOR3(0, 1, 0), Ancho, Alto);
 		terreno = new TerrenoRR(300, 300, d3dDevice, d3dContext);
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome34.png");
+
+		/*AGUA*/
+		water = new WaterRR(3, 3, d3dDevice, d3dContext, L"Assets/agua/Agua1.png", L"Assets/agua/Agua1N.png");
+
 		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 																													   /*BILLBOARDS*/
 		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 		billboard = new BillboardRR(L"Assets/Billboards/fuego-anim.png", L"Assets/Billboards/fuego-anim-normal.png", d3dDevice, d3dContext, 5);
 		billArbol = new BillboardRR(L"Assets/Billboards/arbol.png", L"Assets/Billboards/arbol_normal.png", d3dDevice, d3dContext, 6);
 		billArbusto = new BillboardRR(L"Assets/Billboards/arbusto.png", L"Assets/Billboards/arbusto_normal.png", d3dDevice, d3dContext, 6);
+		billBola = new BillboardRR(L"Assets/Billboards/bola.png", L"Assets/Billboards/bolaNormal.png", d3dDevice, d3dContext, 6);
 		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 																													   /*MODELOS*/
 		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
@@ -272,7 +284,7 @@ public:
 		caballoVaquero = new ModeloRR(d3dDevice, d3dContext, "Assets/caballovaquero/caballoVaquero.obj", L"Assets/caballovaquero/caballoVaquero.png", L"Assets/caballovaquero/caballoVaquero.png", L"Assets/caballovaquero/caballoVaquero_norm.png", camara->hdveo.x, camara->hdveo.z);
 		carreta = new ModeloRR(d3dDevice, d3dContext, "Assets/carreta/carreta_obj.obj", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLORnormal.png", 80, 15);
 		carril = new ModeloRR(d3dDevice, d3dContext, "Assets/carril/carril.obj", L"Assets/carril/METAL.jpg", L"Assets/carril/METAL.jpg", L"Assets/carril/METALnormal.png", -60, -29);
-		barrel = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolornormal.png", 50, -90);
+		barrel = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolornormal.png", 0, 0);
 
 		enemigo1 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal11.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
 		enemigo1Pos2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal22.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
@@ -665,6 +677,22 @@ public:
 
 			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam,
 				80, 100, terreno->Superficie(-80, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			/*---------------------------------------------------------------------------*/
+			/*                                                 BOLA                                                         */
+			/*---------------------------------------------------------------------------*/
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				0, 80, terreno->Superficie(0, 80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				0, -80, terreno->Superficie(0, -80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				50, 80, terreno->Superficie(50, 80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-50, 80, terreno->Superficie(-50, 80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
 			/*---------------------------------------------------------------------------*/
 			/*                                                 COLISIONES                                              */
 			/*---------------------------------------------------------------------------*/
@@ -1244,6 +1272,23 @@ public:
 
 			billArbusto->Draw(camara->vista, camara->proyeccion, camara->posCam3P,
 				80, 100, terreno->Superficie(-80, 100) - 1.8, 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			/*---------------------------------------------------------------------------*/
+			/*                                                 BOLA                                                         */
+			/*---------------------------------------------------------------------------*/
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				0, 80, terreno->Superficie(0, 80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				0, -80, terreno->Superficie(0, -80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				50, 80, terreno->Superficie(50, 80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+			billBola->Draw(camara->vista, camara->proyeccion, camara->posCam,
+				-50, 80, terreno->Superficie(-50, 80), 3.5, uv1, uv2, uv3, uv4, frameBillboard, false);
+
+
 			/*-------------------------------------------------------------------------------*/
 			/*                                                  COLISIONES TERCERA                                  */
 			/*-------------------------------------------------------------------------------*/
@@ -1575,6 +1620,7 @@ public:
 			caballoVaquero->setPosX(camara->hdveo.x);
 			caballoVaquero->setPosZ(camara->hdveo.z);
 			caballoVaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoVaquero->getPosX(), caballoVaquero->getPosZ()), camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
+			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel->getPosX(), barrel->getPosZ()), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 
 			if (!ocultarBala1)
 				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
@@ -1844,6 +1890,11 @@ public:
 		texto->DrawText(0.3, 0.95, "Tiempo de juego restante: " + tiempo, 0.010f);
 		textoBalas->DrawText(-0.3, 0.95, "Cantidad de balas: " + numBalas, 0.010f);
 		playRevolver = false;
+
+		TurnOnAlphaBlending();
+		water->Draw(camara->vista, camara->proyeccion, 1, terreno->Superficie(0, 0) + 3.46, 0.8, 0.01f, lightDirection, lightColor);
+		TurnOffAlphaBlending();
+
 		swapChain->Present(1, 0);
 	}
 

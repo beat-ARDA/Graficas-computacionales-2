@@ -24,7 +24,7 @@ PS_Input VS_Main(VS_Input vertex)
 {
     PS_Input psOut;
     psOut.pos = mul(vertex.pos, worldMatrix);
-    psOut.normal = mul(vertex.normal, worldMatrix);
+    psOut.normal = mul(vertex.normal, (float3x4)worldMatrix);
     psOut.uv = vertex.uv;
     
     return psOut;
