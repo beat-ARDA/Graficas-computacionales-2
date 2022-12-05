@@ -93,6 +93,14 @@ public:
 	ModeloRR* bala4;
 	ModeloRR* bala5;
 	ModeloRR* establo;
+	ModeloRR* enemigo1Pos2;
+	ModeloRR* enemigo1Pos3;
+	ModeloRR* enemigo2Pos2;
+	ModeloRR* enemigo2Pos3;
+	ModeloRR* enemigo3Pos2;
+	ModeloRR* enemigo3Pos3;
+	ModeloRR* enemigo4Pos2;
+	ModeloRR* enemigo4Pos3;
 
 	float rotCam;
 	float rotCamX;
@@ -132,6 +140,10 @@ public:
 	int vidas;
 	int balas;
 	int cantidadEnemigos;
+	int selectPos1;
+	int selectPos2;
+	int selectPos3;
+	int selectPos4;
 
 	float elevacionModelo;
 	float movBala[4];
@@ -168,6 +180,10 @@ public:
 
 	DXRR(HWND hWnd, int Ancho, int Alto)
 	{
+		selectPos1 = 1;
+		selectPos2 = 1;
+		selectPos3 = 1;
+		selectPos4 = 1;
 		enemigoDisparo1 = false;
 		enemigoDisparo2 = false;
 		enemigoDisparo3 = false;
@@ -257,27 +273,37 @@ public:
 		carreta = new ModeloRR(d3dDevice, d3dContext, "Assets/carreta/carreta_obj.obj", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLORnormal.png", 80, 15);
 		carril = new ModeloRR(d3dDevice, d3dContext, "Assets/carril/carril.obj", L"Assets/carril/METAL.jpg", L"Assets/carril/METAL.jpg", L"Assets/carril/METALnormal.png", -60, -29);
 		barrel = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolor.jpg", L"Assets/barrel/barreluvscolornormal.png", 50, -90);
-		enemigo1 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigo.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
-		enemigo2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigo.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", -90, -50);
-		enemigo3 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigo.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", -30, -30);
-		enemigo4 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigo.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", -90, 80);
+
+		enemigo1 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal11.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
+		enemigo1Pos2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal22.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
+		enemigo1Pos3 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal33.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
+		enemigo2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal11.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", -90, -50);
+		enemigo2Pos2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal22.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", -90, -50);
+		enemigo2Pos3 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal33.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", -90, -50);
+		enemigo3 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal11.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", -30, -30);
+		enemigo3Pos2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal22.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", -30, -30);
+		enemigo3Pos3 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal33.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", -30, -30);
+		enemigo4 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal11.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", -90, 80);
+		enemigo4Pos2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal22.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", -90, 80);
+		enemigo4Pos3 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal33.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", -90, 80);
+
 		pistola = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/Colt_Python.obj", L"Assets/guns/gunsuvscolorfinalFINAL.jpg", L"Assets/guns/gunsuvscolorfinalFINAL.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 0.0f, 0.0f);
 
-		balaPist1 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
-		balaPist2 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
-		balaPist3 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
-		balaPist4 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
+		balaPist1 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/horizontalBala.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
+		balaPist2 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/horizontalBala.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
+		balaPist3 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/horizontalBala.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
+		balaPist4 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/horizontalBala.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", camara->hdveo.x, camara->hdveo.z);
 
 		ristraBalas[0] = balaPist1;
 		ristraBalas[1] = balaPist2;
 		ristraBalas[2] = balaPist3;
 		ristraBalas[3] = balaPist4;
 
-		bala1 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", -20, 0.0);
-		bala2 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 100, -50);
-		bala3 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", -100, 50);
-		bala4 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", 120, 80);
-		bala5 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/bullet.obj", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/gunsuvscolorfinalFINALnormal.png", -120, -60);
+		bala1 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/verticalBala.obj", L"Assets/guns/balaDiffuse.png", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/balaNormal.png", -20, 0.0);
+		bala2 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/verticalBala.obj", L"Assets/guns/balaDiffuse.png", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/balaNormal.png", 100, -50);
+		bala3 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/verticalBala.obj", L"Assets/guns/balaDiffuse.png", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/balaNormal.png", -100, 50);
+		bala4 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/verticalBala.obj", L"Assets/guns/balaDiffuse.png", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/balaNormal.png", 120, 80);
+		bala5 = new ModeloRR(d3dDevice, d3dContext, "Assets/guns/verticalBala.obj", L"Assets/guns/balaDiffuse.png", L"Assets/guns/miltrenCOLOR.jpg", L"Assets/guns/balaNormal.png", -120, -60);
 
 		fullVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_full.png");
 		middleVida = new GUI(d3dDevice, d3dContext, 0.15, 0.26, L"Assets/vidas/health_2.png");
@@ -978,51 +1004,122 @@ public:
 			pistola->DrawRevoler(camara->vista, camara->proyeccion, camara->hdveo.y, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2);
 
 			if (!ocultarBala1)
-				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala2)
-				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala3)
-				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala4)
-				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala5)
-				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
-			/*ENEMIGO1*/
 			if (!ocultarEnemigo1) {
 				if (!movEnemigo1Dir)
+				{
 					enemigo1->setPosX(enemigo1->getPosX() + movEnemigo1X);
+					enemigo1Pos2->setPosX(enemigo1Pos2->getPosX() + movEnemigo1X);
+					enemigo1Pos3->setPosX(enemigo1Pos3->getPosX() + movEnemigo1X);
+				}
 				if (movEnemigo1Dir)
+				{
 					enemigo1->setPosX(enemigo1->getPosX() - movEnemigo1X);
-				enemigo1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1->getPosX(), enemigo1->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+					enemigo1Pos2->setPosX(enemigo1Pos2->getPosX() - movEnemigo1X);
+					enemigo1Pos3->setPosX(enemigo1Pos3->getPosX() - movEnemigo1X);
+				}
+
+				if (selectPos1 >= 1 && selectPos1 < 10)
+					enemigo1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1->getPosX(), enemigo1->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos1 >= 10 && selectPos1 < 20)
+					enemigo1Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1Pos2->getPosX(), enemigo1Pos2->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos1 >= 20 && selectPos1 < 30)
+					enemigo1Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1Pos3->getPosX(), enemigo1Pos3->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos1 += 1;
+				if (selectPos1 > 30)
+					selectPos1 = 1;
 			}
 
 			if (!ocultarEnemigo2) {
 				if (!movEnemigo2Dir)
+				{
 					enemigo2->setPosX(enemigo2->getPosX() + movEnemigo2X);
+					enemigo2Pos2->setPosX(enemigo2Pos2->getPosX() + movEnemigo2X);
+					enemigo2Pos3->setPosX(enemigo2Pos3->getPosX() + movEnemigo1X);
+				}
 				if (movEnemigo2Dir)
+				{
 					enemigo2->setPosX(enemigo2->getPosX() - movEnemigo2X);
-				enemigo2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2->getPosX(), enemigo2->getPosZ()) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+					enemigo2Pos2->setPosX(enemigo2Pos2->getPosX() - movEnemigo2X);
+					enemigo2Pos3->setPosX(enemigo2Pos3->getPosX() - movEnemigo2X);
+				}
+
+				if (selectPos2 >= 1 && selectPos2 < 10)
+					enemigo2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2->getPosX(), enemigo2->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos2 >= 10 && selectPos2 < 20)
+					enemigo2Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2Pos2->getPosX(), enemigo2Pos2->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos2 >= 20 && selectPos2 < 30)
+					enemigo2Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2Pos3->getPosX(), enemigo2Pos3->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos2 += 1;
+				if (selectPos2 > 30)
+					selectPos2 = 1;
 			}
+
 			if (!ocultarEnemigo3) {
 				if (!movEnemigo3Dir)
+				{
 					enemigo3->setPosX(enemigo3->getPosX() + movEnemigo3X);
+					enemigo3Pos2->setPosX(enemigo3Pos2->getPosX() + movEnemigo3X);
+					enemigo3Pos3->setPosX(enemigo3Pos3->getPosX() + movEnemigo3X);
+				}
 				if (movEnemigo3Dir)
+				{
 					enemigo3->setPosX(enemigo3->getPosX() - movEnemigo3X);
-				enemigo3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3->getPosX(), enemigo3->getPosZ()) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+					enemigo3Pos2->setPosX(enemigo3Pos2->getPosX() - movEnemigo3X);
+					enemigo3Pos3->setPosX(enemigo3Pos3->getPosX() - movEnemigo3X);
+				}
+
+				if (selectPos3 >= 1 && selectPos3 < 10)
+					enemigo3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3->getPosX(), enemigo3->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos3 >= 10 && selectPos3 < 20)
+					enemigo3Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3Pos2->getPosX(), enemigo3Pos2->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos3 >= 20 && selectPos3 < 30)
+					enemigo3Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3Pos3->getPosX(), enemigo3Pos3->getPosZ()) + 1, camara->posCam, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos3 += 1;
+				if (selectPos3 > 30)
+					selectPos3 = 1;
 			}
 			if (!ocultarEnemigo4) {
 				if (!movEnemigo4Dir)
+				{
 					enemigo4->setPosX(enemigo4->getPosX() + movEnemigo4X);
+					enemigo4Pos2->setPosX(enemigo4Pos2->getPosX() + movEnemigo4X);
+					enemigo4Pos3->setPosX(enemigo4Pos3->getPosX() + movEnemigo4X);
+				}
 				if (movEnemigo4Dir)
+				{
 					enemigo4->setPosX(enemigo4->getPosX() - movEnemigo4X);
-				enemigo4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4->getPosX(), enemigo4->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+					enemigo4Pos2->setPosX(enemigo4Pos2->getPosX() - movEnemigo4X);
+					enemigo4Pos3->setPosX(enemigo4Pos3->getPosX() - movEnemigo4X);
+				}
+
+				if (selectPos4 >= 1 && selectPos4 < 10)
+					enemigo4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4->getPosX(), enemigo4->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos4 >= 10 && selectPos4 < 20)
+					enemigo4Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4Pos2->getPosX(), enemigo4Pos2->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos4 >= 20 && selectPos4 < 30)
+					enemigo4Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4Pos3->getPosX(), enemigo4Pos3->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos4 += 1;
+				if (selectPos4 > 30)
+					selectPos4 = 1;
 			}
-			TurnOnAlphaBlending();
 			/*-----------------------------------------*/
 			/*                          BALAS 4                      */
 			/*-----------------------------------------*/
@@ -1098,7 +1195,6 @@ public:
 				ristraBalas[0]->setPosZDisparo(zbalaAux[0] + movBala[0]);
 				ristraBalas[0]->Disparo(camara->vista, camara->proyeccion, ybalaAux[0], camara->posCam, 10.0f, rotyAux[0] + XM_PI, 0.1);
 			}
-			TurnOffAlphaBlending();
 		}
 		else {
 			/*---------------------------------------------------------------------------*/
@@ -1481,53 +1577,126 @@ public:
 			caballoVaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoVaquero->getPosX(), caballoVaquero->getPosZ()), camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
 
 			if (!ocultarBala1)
-				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala2)
-				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala3)
-				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala4)
-				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			if (!ocultarBala5)
-				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 2, true, false);
+				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
 
 			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 
 			if (!ocultarEnemigo1) {
 				if (!movEnemigo1Dir)
+				{
 					enemigo1->setPosX(enemigo1->getPosX() + movEnemigo1X);
+					enemigo1Pos2->setPosX(enemigo1Pos2->getPosX() + movEnemigo1X);
+					enemigo1Pos3->setPosX(enemigo1Pos3->getPosX() + movEnemigo1X);
+				}
 				if (movEnemigo1Dir)
+				{
 					enemigo1->setPosX(enemigo1->getPosX() - movEnemigo1X);
-				enemigo1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1->getPosX(), enemigo1->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+					enemigo1Pos2->setPosX(enemigo1Pos2->getPosX() - movEnemigo1X);
+					enemigo1Pos3->setPosX(enemigo1Pos3->getPosX() - movEnemigo1X);
+				}
+
+				if (selectPos1 >= 1 && selectPos1 < 10)
+					enemigo1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1->getPosX(), enemigo1->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos1 >= 10 && selectPos1 < 20)
+					enemigo1Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1Pos2->getPosX(), enemigo1Pos2->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos1 >= 20 && selectPos1 < 30)
+					enemigo1Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo1Pos3->getPosX(), enemigo1Pos3->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos1 += 1;
+				if (selectPos1 > 30)
+					selectPos1 = 1;
 			}
 
 			if (!ocultarEnemigo2) {
 				if (!movEnemigo2Dir)
+				{
 					enemigo2->setPosX(enemigo2->getPosX() + movEnemigo2X);
+					enemigo2Pos2->setPosX(enemigo2Pos2->getPosX() + movEnemigo2X);
+					enemigo2Pos3->setPosX(enemigo2Pos3->getPosX() + movEnemigo1X);
+				}
 				if (movEnemigo2Dir)
+				{
 					enemigo2->setPosX(enemigo2->getPosX() - movEnemigo2X);
-				enemigo2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2->getPosX(), enemigo2->getPosZ()) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+					enemigo2Pos2->setPosX(enemigo2Pos2->getPosX() - movEnemigo2X);
+					enemigo2Pos3->setPosX(enemigo2Pos3->getPosX() - movEnemigo2X);
+				}
+
+				if (selectPos2 >= 1 && selectPos2 < 10)
+					enemigo2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2->getPosX(), enemigo2->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos2 >= 10 && selectPos2 < 20)
+					enemigo2Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2Pos2->getPosX(), enemigo2Pos2->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos2 >= 20 && selectPos2 < 30)
+					enemigo2Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo2Pos3->getPosX(), enemigo2Pos3->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos2 += 1;
+				if (selectPos2 > 30)
+					selectPos2 = 1;
 			}
+
 			if (!ocultarEnemigo3) {
 				if (!movEnemigo3Dir)
+				{
 					enemigo3->setPosX(enemigo3->getPosX() + movEnemigo3X);
+					enemigo3Pos2->setPosX(enemigo3Pos2->getPosX() + movEnemigo3X);
+					enemigo3Pos3->setPosX(enemigo3Pos3->getPosX() + movEnemigo3X);
+				}
 				if (movEnemigo3Dir)
+				{
 					enemigo3->setPosX(enemigo3->getPosX() - movEnemigo3X);
-				enemigo3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3->getPosX(), enemigo3->getPosZ()) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
+					enemigo3Pos2->setPosX(enemigo3Pos2->getPosX() - movEnemigo3X);
+					enemigo3Pos3->setPosX(enemigo3Pos3->getPosX() - movEnemigo3X);
+				}
+
+				if (selectPos3 >= 1 && selectPos3 < 10)
+					enemigo3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3->getPosX(), enemigo3->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos3 >= 10 && selectPos3 < 20)
+					enemigo3Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3Pos2->getPosX(), enemigo3Pos2->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos3 >= 20 && selectPos3 < 30)
+					enemigo3Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo3Pos3->getPosX(), enemigo3Pos3->getPosZ()) + 1, camara->posCam3P, 10.0f, -XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos3 += 1;
+				if (selectPos3 > 30)
+					selectPos3 = 1;
 			}
 			if (!ocultarEnemigo4) {
 				if (!movEnemigo4Dir)
+				{
 					enemigo4->setPosX(enemigo4->getPosX() + movEnemigo4X);
+					enemigo4Pos2->setPosX(enemigo4Pos2->getPosX() + movEnemigo4X);
+					enemigo4Pos3->setPosX(enemigo4Pos3->getPosX() + movEnemigo4X);
+				}
 				if (movEnemigo4Dir)
+				{
 					enemigo4->setPosX(enemigo4->getPosX() - movEnemigo4X);
-				enemigo4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4->getPosX(), enemigo4->getPosZ()) + 1, camara->posCam, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+					enemigo4Pos2->setPosX(enemigo4Pos2->getPosX() - movEnemigo4X);
+					enemigo4Pos3->setPosX(enemigo4Pos3->getPosX() - movEnemigo4X);
+				}
+
+				if (selectPos4 >= 1 && selectPos4 < 10)
+					enemigo4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4->getPosX(), enemigo4->getPosZ()) + 1, camara->posCam3P, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos4 >= 10 && selectPos4 < 20)
+					enemigo4Pos2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4Pos2->getPosX(), enemigo4Pos2->getPosZ()) + 1, camara->posCam3P, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+				if (selectPos4 >= 20 && selectPos4 < 30)
+					enemigo4Pos3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(enemigo4Pos3->getPosX(), enemigo4Pos3->getPosZ()) + 1, camara->posCam3P, 10.0f, XM_PIDIV2, 'Y', 1, true, false);
+
+				selectPos4 += 1;
+				if (selectPos4 > 30)
+					selectPos4 = 1;
 			}
-			TurnOnAlphaBlending();
+
 			/*-----------------------------------------*/
 			/*                          BALAS 4                      */
 			/*-----------------------------------------*/
@@ -1607,7 +1776,7 @@ public:
 				ristraBalas[0]->setPosZDisparo(zbalaAux[0] + movBala[0]);
 				ristraBalas[0]->Disparo(camara->vista, camara->proyeccion, ybalaAux[0], camara->posCam3P, 10.0f, rotyAux[0] + XM_PI, 0.1);
 			}
-			TurnOffAlphaBlending();
+
 		}
 
 		//LIMITE TERRENO

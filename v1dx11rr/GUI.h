@@ -302,7 +302,7 @@ public:
 		D3DXMatrixTranspose(&consBuff.WorldMatrix, &World);
 
 		d3dContext->UpdateSubresource(cbBuffer, 0, NULL, &consBuff, 0, 0);
-		d3dContext->VSSetConstantBuffers(0,1,&cbBuffer);
+		d3dContext->VSSetConstantBuffers(0, 1, &cbBuffer);
 
 		d3dContext->PSSetShaderResources(0, 1, &Texture);
 		d3dContext->PSSetSamplers(0, 1, &TexSamplerState);
