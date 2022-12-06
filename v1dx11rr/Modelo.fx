@@ -44,6 +44,11 @@ cbuffer cbMagnitudEspecular : register(b0)
     float4 magnitudEspecular;
 };
 
+cbuffer cbColorBala : register(b1)
+{
+    float4 colorBala;
+};
+
 struct VS_Input
 {
     float4 pos : POSITION;
@@ -149,12 +154,22 @@ float4 PS_Main(PS_Input frag) : SV_TARGET
     float3 lightEspecular = colorEspecular * spec;
     
     //Final
+    float3 iluminacionFinal;
+    if (colorBala.w < 1.0f)
+    {
     
-    float3 iluminacionFinal = lightAmbiental + lightDifusa + lightEspecular;
+        iluminacionFinal = lightAmbiental + lightDifusa + lightEspecular;
+    }
+    else
+    {
+        iluminacionFinal = lightAmbiental + lightDifusa + lightEspecular + colorBala.rgb;
+    }
     
     float4 colorFinal = float4(textura.r, textura.g, textura.b, 1.0f) * float4(iluminacionFinal, 1.0f);
     float4 fogColor = float4(0.5, 0.5, 0.5, 1.0);
     colorFinal = frag.fogFactor * colorFinal + (1.0f - frag.fogFactor) * fogColor;
+    
+    
 
     return colorFinal;
 }

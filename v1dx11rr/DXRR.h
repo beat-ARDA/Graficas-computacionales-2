@@ -1047,19 +1047,19 @@ public:
 			pistola->DrawRevoler(camara->vista, camara->proyeccion, camara->hdveo.y, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2);
 
 			if (!ocultarBala1)
-				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala2)
-				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala3)
-				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala4)
-				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala5)
-				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarEnemigo1) {
 				if (!movEnemigo1Dir)
@@ -1086,7 +1086,6 @@ public:
 				if (selectPos1 > 30)
 					selectPos1 = 1;
 			}
-
 			if (!ocultarEnemigo2) {
 				if (!movEnemigo2Dir)
 				{
@@ -1112,7 +1111,6 @@ public:
 				if (selectPos2 > 30)
 					selectPos2 = 1;
 			}
-
 			if (!ocultarEnemigo3) {
 				if (!movEnemigo3Dir)
 				{
@@ -1641,19 +1639,19 @@ public:
 			barrel4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel4->getPosX(), barrel4->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
 
 			if (!ocultarBala1)
-				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala2)
-				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala2->getPosX(), bala2->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala3)
-				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala3->getPosX(), bala3->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala4)
-				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala4->getPosX(), bala4->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			if (!ocultarBala5)
-				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
+				bala5->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala5->getPosX(), bala5->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false, true);
 
 			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
 			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam3P, 10.0f, 0, 'A', 1, true, false);

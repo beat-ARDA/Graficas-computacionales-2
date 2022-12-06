@@ -60,10 +60,13 @@ private:
 
 	ID3D11Buffer* cameraPosCB;
 	XMFLOAT3 camPos;
+	ID3D11Buffer* colorBalaCB;
+	XMFLOAT4 colorBala;
 	ID3D11Buffer* specForceCB;
 	//Color de Luz Especular
 	ID3D11Buffer* m_pMagnitudEspecular;
 	float magnitudEspecular;
+	bool dirColorBala;
 
 	float specForce;
 
@@ -112,6 +115,8 @@ public:
 	ModeloRR(ID3D11Device* D3DDevice, ID3D11DeviceContext* D3DContext, char* ModelPath, WCHAR* colorTexturePath, WCHAR* specularTexturePath, WCHAR* normalTexturePath, float _posX, float _posZ)
 	{
 		//copiamos el device y el device context a la clase terreno
+		colorBala = XMFLOAT4(5.0f, 0.0f, 0.0f, 1.0f);
+		dirColorBala = false;
 		d3dContext = D3DContext;
 		d3dDevice = D3DDevice;
 
@@ -344,6 +349,13 @@ public:
 		{
 			return false;
 		}
+
+		d3dResult = d3dDevice->CreateBuffer(&constDesc, 0, &colorBalaCB);
+		if (FAILED(d3dResult))
+		{
+			return false;
+		}
+
 		d3dResult = d3dDevice->CreateBuffer(&constDesc, 0, &specForceCB);
 		if (FAILED(d3dResult))
 		{
@@ -406,6 +418,8 @@ public:
 
 		if (cameraPosCB)
 			cameraPosCB->Release();
+		if (colorBalaCB)
+			colorBalaCB->Release();
 		if (specForceCB)
 			specForceCB->Release();
 		if (normalMap)
@@ -435,6 +449,7 @@ public:
 		projCB = 0;
 		worldCB = 0;
 		cameraPosCB = 0;
+		colorBalaCB = 0;
 		specForceCB = 0;
 	}
 
@@ -662,8 +677,18 @@ public:
 
 		d3dContext->Draw(m_ObjParser.m_nVertexCount, 0);
 	}
-	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float rot, char angle, float scale, bool camaraTipo, bool moveCam)
+	void Draw(D3DXMATRIX vista, D3DXMATRIX proyeccion, float ypos, D3DXVECTOR3 posCam, float specForce, float rot, char angle, float scale, bool camaraTipo, bool moveCam, bool esBala = false)
 	{
+		if (colorBala.x >= 5.0f)
+			dirColorBala = true;
+		if (colorBala.x <= 1.0f)
+			dirColorBala = false;
+
+		if (dirColorBala)
+			colorBala.x -= 0.1f;
+		else
+			colorBala.x += 0.1;
+
 		static float rotation = 0.0f;
 		rotation += 0.01;
 
@@ -730,12 +755,16 @@ public:
 			worldMat = rotationMat * scaleMat * translationMat;
 		}
 
+		if (!esBala)
+			colorBala.w = 0.0f;
+
 		D3DXMatrixTranspose(&worldMat, &worldMat);
 		//actualiza los buffers del shader
 		d3dContext->UpdateSubresource(worldCB, 0, 0, &worldMat, 0, 0);
 		d3dContext->UpdateSubresource(viewCB, 0, 0, &vista, 0, 0);
 		d3dContext->UpdateSubresource(projCB, 0, 0, &proyeccion, 0, 0);
 		d3dContext->UpdateSubresource(cameraPosCB, 0, 0, &camPos, 0, 0);
+		d3dContext->UpdateSubresource(colorBalaCB, 0, 0, &colorBala, 0, 0);
 		d3dContext->UpdateSubresource(specForceCB, 0, 0, &specForce, 0, 0);
 		d3dContext->UpdateSubresource(m_pColorDifusoCB, 0, 0, &m_ColorDifuso, 0, 0);
 		d3dContext->UpdateSubresource(m_pMagnitudEspecular, 0, 0, &magnitudEspecular, 0, 0);
@@ -750,6 +779,7 @@ public:
 		d3dContext->VSSetConstantBuffers(5, 1, &m_pColorDifusoCB);
 		d3dContext->VSSetConstantBuffers(6, 1, &m_pLightPosCB);
 		d3dContext->PSSetConstantBuffers(0, 1, &m_pMagnitudEspecular);
+		d3dContext->PSSetConstantBuffers(1, 1, &colorBalaCB);
 		//cantidad de trabajos
 
 		d3dContext->Draw(m_ObjParser.m_nVertexCount, 0);
