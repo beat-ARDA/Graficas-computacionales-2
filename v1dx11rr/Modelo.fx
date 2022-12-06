@@ -60,6 +60,7 @@ struct PS_Input
     float3 cameraVec : TEXCOORD3;
     float3 tangent : TEXCOORD4;
     float3 binormal : TEXCOORD5;
+    float fogFactor : FOG;
 };
 
 PS_Input VS_Main(VS_Input vertex)
@@ -68,7 +69,9 @@ PS_Input VS_Main(VS_Input vertex)
 
     // Initial transformations
     float4 worldPos = mul(vertex.pos, worldMatrix);
+    float4 vertexPos;
     vsOut.pos = mul(worldPos, viewMatrix);
+    vertexPos = vsOut.pos;
     vsOut.pos = mul(vsOut.pos, projMatrix);
     vsOut.tex0 = vertex.tex0;
     
@@ -105,6 +108,12 @@ PS_Input VS_Main(VS_Input vertex)
     vsOut.lightVec = normalize(-lightDirection);
     // Calculate camera vector
     vsOut.cameraVec = normalize(cameraPos - (float3) worldPos);
+    
+    float fogStart = -90.0f;
+    float fogEnd = 90.0f;
+    
+    float fogFactor = saturate((fogEnd - vertexPos.z) / (fogEnd - fogStart));
+    vsOut.fogFactor = fogFactor;
 
     return vsOut;
 }
@@ -138,9 +147,14 @@ float4 PS_Main(PS_Input frag) : SV_TARGET
     float spec = pow(saturate(dot(cameraVec, reflecDir)), 32.0f);
     //float3 lightEspecular = colorEspecular * (spec * textura.xyz);
     float3 lightEspecular = colorEspecular * spec;
-
+    
     //Final
+    
     float3 iluminacionFinal = lightAmbiental + lightDifusa + lightEspecular;
+    
+    float4 colorFinal = float4(textura.r, textura.g, textura.b, 1.0f) * float4(iluminacionFinal, 1.0f);
+    float4 fogColor = float4(0.5, 0.5, 0.5, 1.0);
+    colorFinal = frag.fogFactor * colorFinal + (1.0f - frag.fogFactor) * fogColor;
 
-    return float4(textura.r, textura.g, textura.b, 0.0f) * float4(iluminacionFinal, 0.0f);
+    return colorFinal;
 }

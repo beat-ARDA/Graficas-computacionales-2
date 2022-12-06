@@ -5,74 +5,86 @@ SamplerState colorSampler : register(s0);
 
 cbuffer cbChangerEveryFrame : register(b0)
 {
-	matrix worldMatrix;
+    matrix worldMatrix;
 };
 
 cbuffer cbNeverChanges : register(b1)
 {
-	matrix viewMatrix;
+    matrix viewMatrix;
 };
 
 cbuffer cbChangeOnResize : register(b2)
 {
-	matrix projMatrix;
+    matrix projMatrix;
 };
 
 struct VS_Input
 {
-	float4 pos : POSITION;
-	float2 tex0 : TEXCOORD0;
-	float2 blendTex : TEXCOORD1;
-	float3 normal : NORMAL0;
-	float3 tangente : NORMAL1;
-	float3 binormal : NORMAL2;
+    float4 pos : POSITION;
+    float2 tex0 : TEXCOORD0;
+    float2 blendTex : TEXCOORD1;
+    float3 normal : NORMAL0;
+    float3 tangente : NORMAL1;
+    float3 binormal : NORMAL2;
 };
 
 struct PS_Input
 {
-	float4 pos : SV_POSITION;
-	float2 tex0 : TEXCOORD0;
-	float2 blendTex : TEXCOORD1;
-	float3 normal : NORMAL0;
-	float3 tangent : NORMAL1;
-	float3 binorm : NORMAL2;
+    float4 pos : SV_POSITION;
+    float2 tex0 : TEXCOORD0;
+    float2 blendTex : TEXCOORD1;
+    float3 normal : NORMAL0;
+    float3 tangent : NORMAL1;
+    float3 binorm : NORMAL2;
+    float fogFactor : FOG;
 };
 
 PS_Input VS_Main(VS_Input vertex)
 {
-	PS_Input vsOut = (PS_Input)0;
-	vsOut.pos = mul(vertex.pos, worldMatrix);
-	vsOut.pos = mul(vsOut.pos, viewMatrix);
-	vsOut.pos = mul(vsOut.pos, projMatrix);
+    float4 vertexPos;
+    PS_Input vsOut = (PS_Input) 0;
+    vsOut.pos = mul(vertex.pos, worldMatrix);
+    vsOut.pos = mul(vsOut.pos, viewMatrix);
+    vertexPos = vsOut.pos;
+    vsOut.pos = mul(vsOut.pos, projMatrix);
 
-	vsOut.tex0 = vertex.tex0;
-	vsOut.blendTex = vertex.blendTex;
-	vsOut.normal = normalize(mul(vertex.normal, worldMatrix));
-	vsOut.tangent = normalize(mul(vertex.tangente, worldMatrix));
-	vsOut.binorm = normalize(mul(vertex.binormal, worldMatrix));
+    vsOut.tex0 = vertex.tex0;
+    vsOut.blendTex = vertex.blendTex;
+    vsOut.normal = normalize(mul(vertex.normal, worldMatrix));
+    vsOut.tangent = normalize(mul(vertex.tangente, worldMatrix));
+    vsOut.binorm = normalize(mul(vertex.binormal, worldMatrix));
+	
+    float fogStart = -90.0f;
+    float fogEnd = 90.0f;
+    
+    float fogFactor = saturate((fogEnd - vertexPos.z) / (fogEnd - fogStart));
+    vsOut.fogFactor = fogFactor;
 
-	return vsOut;
+    return vsOut;
 }
 
 float4 PS_Main(PS_Input pix) : SV_TARGET
 {
-	float4 fColor = float4(1,0,0,1);
+    float4 fColor = float4(1, 0, 0, 1);
 
-	float3 ambient = float3(0.1f, 0.1f, 0.1f);
+    float3 ambient = float3(0.1f, 0.1f, 0.1f);
 
-	float4 text = colorMap.Sample(colorSampler, pix.tex0);
-	float4 text2 = colorMap2.Sample(colorSampler, pix.tex0);
-	float4 alphaBlend = blendMap.Sample(colorSampler, pix.blendTex);
-	float4 textf = (text * alphaBlend) + ((1.0 - alphaBlend) * text2);
+    float4 text = colorMap.Sample(colorSampler, pix.tex0);
+    float4 text2 = colorMap2.Sample(colorSampler, pix.tex0);
+    float4 alphaBlend = blendMap.Sample(colorSampler, pix.blendTex);
+    float4 textf = (text * alphaBlend) + ((1.0 - alphaBlend) * text2);
 
-	float3 DiffuseDirection = float3(0.5f, -1.0f, 0.0f);
-	float4 DiffuseColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
+    float3 DiffuseDirection = float3(0.5f, -1.0f, 0.0f);
+    float4 DiffuseColor = float4(1.0f, 1.0f, 1.0f, 1.0f);
 
-	float3 diffuse = dot(-DiffuseDirection, pix.normal);
-	diffuse = saturate(diffuse*DiffuseColor.rgb);
-	diffuse = saturate(diffuse + ambient);
+    float3 diffuse = dot(-DiffuseDirection, pix.normal);
+    diffuse = saturate(diffuse * DiffuseColor.rgb);
+    diffuse = saturate(diffuse + ambient);
 
-	fColor = float4(textf.rgb * diffuse, 1.0f);
+    fColor = float4(textf.rgb * diffuse, 1.0f);
+	
+    float4 fogColor = float4(0.5, 0.5, 0.5, 1.0);
+    fColor = pix.fogFactor * fColor + (1.0f - pix.fogFactor) * fogColor;
 
-	return fColor;
+    return fColor;
 }

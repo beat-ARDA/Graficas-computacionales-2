@@ -49,13 +49,16 @@ struct PS_Input
     float3 normal : TEXCOORD1;
     float3 tangent : TEXCOORD2;
     float3 binorm : TEXCOORD3;
+    float fogFactor : FOG;
 };
 
 PS_Input VS_Main(VS_Input vertex)
 {
+    float4 vertexPos;
     PS_Input vsOut = (PS_Input) 0;
     vsOut.pos = mul(vertex.pos, worldMatrix);
     vsOut.pos = mul(vsOut.pos, viewMatrix);
+    vertexPos = vsOut.pos;
     vsOut.pos = mul(vsOut.pos, projMatrix);
 
     vsOut.tex0 = vertex.tex0;
@@ -63,6 +66,12 @@ PS_Input VS_Main(VS_Input vertex)
     vsOut.tangent = normalize(mul(vertex.tangente, worldMatrix));
     vsOut.binorm = normalize(mul(vertex.binormal, worldMatrix));
 
+    float fogStart = -90.0f;
+    float fogEnd = 90.0f;
+    
+    float fogFactor = saturate((fogEnd - vertexPos.z) / (fogEnd - fogStart));
+    vsOut.fogFactor = fogFactor;
+    
     return vsOut;
 }
 
@@ -122,6 +131,12 @@ float4 PS_Main(PS_Input pix) : SV_TARGET
 
     //fColor = float4(diffuse, 1.0f);
     //fColor = saturate(text);
-    return float4(fColor.r, fColor.g, fColor.b, 0.6);
+    
+    float4 color = float4(fColor.r, fColor.g, fColor.b, 0.6);
+    
+    float4 fogColor = float4(0.5, 0.5, 0.5, 0.6);
+    color = pix.fogFactor * color + (1.0f - pix.fogFactor) * fogColor;
+    
+    return color;
     //return fColor * float4(as, 1.0f, 1.0f);
 }

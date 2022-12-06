@@ -60,7 +60,10 @@ public:
 
 	int frameBillboard;
 
-	WaterRR* water;
+	WaterRR* water1;
+	WaterRR* water2;
+	WaterRR* water3;
+	WaterRR* water4;
 	TerrenoRR* terreno;
 	SkyDome* skydome;
 	BillboardRR* billboard;
@@ -74,7 +77,10 @@ public:
 	ModeloRR* caballoVaquero;
 	ModeloRR* vagon;
 	ModeloRR* molino;
-	ModeloRR* barrel;
+	ModeloRR* barrel1;
+	ModeloRR* barrel2;
+	ModeloRR* barrel3;
+	ModeloRR* barrel4;
 	ModeloRR* carreta;
 	ModeloRR* tronco;
 	ModeloRR* enemigo1;
@@ -260,7 +266,10 @@ public:
 		skydome = new SkyDome(32, 32, 100.0f, &d3dDevice, &d3dContext, L"SkyDome34.png");
 
 		/*AGUA*/
-		water = new WaterRR(3, 3, d3dDevice, d3dContext, L"Assets/agua/Agua1.png", L"Assets/agua/Agua1N.png");
+		water1 = new WaterRR(4, 3.2, d3dDevice, d3dContext, L"Assets/agua/Agua1.jpg", L"Assets/agua/Agua1N.png");
+		water2 = new WaterRR(4, 3.2, d3dDevice, d3dContext, L"Assets/agua/Agua1.jpg", L"Assets/agua/Agua1N.png");
+		water3 = new WaterRR(4, 3.2, d3dDevice, d3dContext, L"Assets/agua/Agua1.jpg", L"Assets/agua/Agua1N.png");
+		water4 = new WaterRR(4, 3.2, d3dDevice, d3dContext, L"Assets/agua/Agua1.jpg", L"Assets/agua/Agua1N.png");
 
 		/*--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------*/
 																													   /*BILLBOARDS*/
@@ -284,7 +293,10 @@ public:
 		caballoVaquero = new ModeloRR(d3dDevice, d3dContext, "Assets/caballovaquero/caballoVaquero.obj", L"Assets/caballovaquero/caballoVaquero.png", L"Assets/caballovaquero/caballoVaquero.png", L"Assets/caballovaquero/caballoVaquero_norm.png", camara->hdveo.x, camara->hdveo.z);
 		carreta = new ModeloRR(d3dDevice, d3dContext, "Assets/carreta/carreta_obj.obj", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLOR.jpg", L"Assets/carreta/carretauvsCOLORnormal.png", 80, 15);
 		carril = new ModeloRR(d3dDevice, d3dContext, "Assets/carril/carril.obj", L"Assets/carril/METAL.jpg", L"Assets/carril/METAL.jpg", L"Assets/carril/METALnormal.png", -60, -29);
-		barrel = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolornormal.png", 0, 0);
+		barrel1 = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolornormal.png", 80, 0);
+		barrel2 = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolornormal.png", 77, 0);
+		barrel3 = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolornormal.png", 80, -3);
+		barrel4 = new ModeloRR(d3dDevice, d3dContext, "Assets/barrel/Barrel.obj", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolor.png", L"Assets/barrel/barreluvscolornormal.png", 77, -3);
 
 		enemigo1 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal11.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
 		enemigo1Pos2 = new ModeloRR(d3dDevice, d3dContext, "Assets/enemigo/enemigofinal22.obj", L"Assets/enemigo/enemigo.png", L"Assets/enemigo/enemigo2.png", L"Assets/enemigo/enemigo_norm.png", 30, 30);
@@ -1026,7 +1038,10 @@ public:
 			caballoNegro->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoNegro->getPosX(), caballoNegro->getPosZ()), camara->posCam, 10.0f, rotCam + XM_PI + XM_PIDIV4, 'Y', 1, this->setCamaraTipo, true);
 			carreta->Draw(camara->vista, camara->proyeccion, terreno->Superficie(80, 15), camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			carril->Draw(camara->vista, camara->proyeccion, terreno->Superficie(-40, 10) + 1, camara->posCam, 10.0f, 0, 'A', 1, true, false);
-			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel->getPosX(), barrel->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			barrel1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel1->getPosX(), barrel1->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			barrel2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel2->getPosX(), barrel2->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			barrel3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel3->getPosX(), barrel3->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			barrel4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel4->getPosX(), barrel4->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
 			pistola->setPosX(camara->hdveo.x);
 			pistola->setPosZ(camara->hdveo.z);
 			pistola->DrawRevoler(camara->vista, camara->proyeccion, camara->hdveo.y, camara->posCam, 10.0f, rotCam + XM_PI, 'Y', 2);
@@ -1620,7 +1635,10 @@ public:
 			caballoVaquero->setPosX(camara->hdveo.x);
 			caballoVaquero->setPosZ(camara->hdveo.z);
 			caballoVaquero->Draw(camara->vista, camara->proyeccion, terreno->Superficie(caballoVaquero->getPosX(), caballoVaquero->getPosZ()), camara->posCam3P, 10.0f, rotCam + XM_PI, 'Y', 1, this->setCamaraTipo, true);
-			barrel->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel->getPosX(), barrel->getPosZ()), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			barrel1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel1->getPosX(), barrel1->getPosZ()), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			barrel2->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel2->getPosX(), barrel2->getPosZ()), camara->posCam3P, 10.0f, 0, 'A', 1, true, false);
+			barrel3->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel3->getPosX(), barrel3->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
+			barrel4->Draw(camara->vista, camara->proyeccion, terreno->Superficie(barrel4->getPosX(), barrel4->getPosZ()), camara->posCam, 10.0f, 0, 'A', 1, true, false);
 
 			if (!ocultarBala1)
 				bala1->Draw(camara->vista, camara->proyeccion, terreno->Superficie(bala1->getPosX(), bala1->getPosZ()) + elevacionModelo, camara->posCam3P, 10.0f, rotCam + XM_PI, 'A', 2, true, false);
@@ -1892,7 +1910,23 @@ public:
 		playRevolver = false;
 
 		TurnOnAlphaBlending();
-		water->Draw(camara->vista, camara->proyeccion, 1, terreno->Superficie(0, 0) + 3.46, 0.8, 0.01f, lightDirection, lightColor);
+
+		water1->Draw(camara->vista, camara->proyeccion, barrel1->getPosX() + 1,
+			terreno->Superficie(barrel1->getPosX(), barrel1->getPosZ()) + 3,
+			barrel1->getPosZ() + 0.8, 0.002f, lightDirection, lightColor);
+
+		water2->Draw(camara->vista, camara->proyeccion, barrel2->getPosX() + 1,
+			terreno->Superficie(barrel2->getPosX(), barrel2->getPosZ()) + 3,
+			barrel2->getPosZ() + 0.8, 0.002f, lightDirection, lightColor);
+
+		water3->Draw(camara->vista, camara->proyeccion, barrel3->getPosX() + 1,
+			terreno->Superficie(barrel3->getPosX(), barrel3->getPosZ()) + 3,
+			barrel3->getPosZ() + 0.8, 0.002f, lightDirection, lightColor);
+
+		water4->Draw(camara->vista, camara->proyeccion, barrel4->getPosX() + 1,
+			terreno->Superficie(barrel4->getPosX(), barrel4->getPosZ()) + 3,
+			barrel4->getPosZ() + 0.8, 0.002f, lightDirection, lightColor);
+
 		TurnOffAlphaBlending();
 
 		swapChain->Present(1, 0);
